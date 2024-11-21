@@ -1,0 +1,62 @@
+#version: '3'
+services:
+    php_laravel_dhcp:
+        image: php:8.2.10-fpm
+        container_name: php_laravel_dhcp
+        volumes:
+            - ./www:/var/www/default/htdocs/
+        ports:
+            - 9000:9000
+        networks:
+            - mynet
+        restart: always
+
+    nginx_laravel_dhcp:
+        image: nginx
+        container_name: nginx_laravel_dhcp
+        links:
+            - php_laravel_dhcp
+        environment:
+            - PHP_FPM_ENABLE=1
+            - PHP_FPM_SERVER_ADDR=php_laravel_dhcp
+        volumes:
+            - ./www:/var/www/default/htdocs/
+            - ./nginx/nginx.conf:/etc/nginx/conf.d/dhcpdw.conf
+            - ./log:/var/log/nginx-stable/
+        ports:
+            - 82:80
+        networks:
+            - mynet
+        restart: always
+
+    #Postgre Service
+    pgsql_laravel_dhcp:
+        image: 'postgres:15'
+        container_name: pgsql_laravel_dhcp
+        ports:
+            - '${DB_PORT:-5432}:${DOCKER_DB_PORT:-5432}'
+        environment:
+            PGPASSWORD: '${DB_PASSWORD:-secret}'
+            POSTGRES_DB: '${DB_DATABASE}'
+            POSTGRES_USER: '${DB_USERNAME}'
+            POSTGRES_PASSWORD: '${DB_PASSWORD:-secret}'
+            SERVICE_NAME: pgsql
+        volumes:
+            - 'pgsql:/var/lib/postgresql/data'
+            - './docker/pgsql/create-testing-database.sql:/docker-entrypoint-initdb.d/10-create-testing-database.sql'
+        networks:
+            - mynet
+        healthcheck:
+            test: [ "CMD", "pg_isready", "-q", "-d", "${DB_DATABASE}", "-U", "${DB_USERNAME}" ]
+            retries: 3
+            timeout: 5s
+
+#Docker Networks
+networks:
+    mynet:
+        driver: bridge
+
+#Volumes
+volumes:
+    pgsql:
+        driver: local
