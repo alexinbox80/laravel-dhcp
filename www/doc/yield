@@ -1,0 +1,26 @@
+ <?php
+
+// файл открывется на чтение
+// если файл невозможно открыть, то бросается исключение
+function getRows($file) {
+    $handle = fopen($file, 'rb');
+    if (!$handle) {
+        throw new Exception();
+    }
+
+    // пока не достигнем конца файла
+    while (!feof($handle)) {
+        // читаем строку
+        // и генерируем значение
+        yield fgetcsv($handle);
+    }
+
+    // закрываем
+    fclose($handle);
+}
+
+// проходимся по всему файлу
+// и выводим на печать
+foreach (getRows('DATA_LOG.csv') as $row) {
+    print_r($row);
+}
