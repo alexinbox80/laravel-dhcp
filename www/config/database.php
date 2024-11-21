@@ -36,7 +36,7 @@ return [
     'connections' => [
         'oracle' => [
             'driver'         => 'oracle',
-	    'tns'            => env('DB_TNS', '(DESCRIPTION = (ADDRESS = (PROTOCOL = TCP)(HOST = 10.65.0.13)(PORT = 1521))(CONNECT_DATA = (SERVER = DEDICATED)(SID = orcl11g)))'),
+	        'tns'            => env('DB_TNS', '(DESCRIPTION = (ADDRESS = (PROTOCOL = TCP)(HOST = 10.65.0.13)(PORT = 1521))(CONNECT_DATA = (SERVER = DEDICATED)(SID = orcl11g)))'),
             'host'           => env('DB_HOST', ''),
             'port'           => env('DB_PORT', '1521'),
             'database'       => env('DB_DATABASE', ''),
