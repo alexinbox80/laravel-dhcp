@@ -39,19 +39,20 @@ class FileService
      */
     public static function convertProcess(string $filePath): bool
     {
-        foreach (self::convertCsv(public_path() . '/storage/' . $filePath) as $key => $row) {
-            DhcpConfig::create([
-                'CAB' => $row[0],
-                'F' => $row[1],
-                'I' => $row[2],
-                'O' => $row[3],
-                'COMP' => $row[4],
-                'IP' => $row[5],
-                'OLD_IP' => $row[8],
-                'MAC' => $row[6],
-                'INFO' => $row[7],
-                'FLAG' => $row[9]
-            ]);
+        foreach (self::convertCsv($filePath) as $row) {
+            if (!empty($row))
+                DhcpConfig::create([
+                    'CAB' => empty($row[0]) ? null : $row[0],
+                    'F' => $row[1],
+                    'I' => $row[2],
+                    'O' => $row[3],
+                    'COMP' => $row[4],
+                    'IP' => $row[5],
+                    'OLD_IP' => $row[8],
+                    'MAC' => $row[6],
+                    'INFO' => $row[7],
+                    'FLAG' => empty($row[11]) ?? false
+                ]);
         }
 
         return true;

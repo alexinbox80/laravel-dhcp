@@ -10,6 +10,7 @@ class DhcpConfig extends Model
     use HasFactory;
 
     //protected $table = 'CAB_IP';
+
     /**
      * The attributes that are mass assignable.
      *

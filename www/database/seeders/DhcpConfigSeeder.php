@@ -16,7 +16,7 @@ class DhcpConfigSeeder extends Seeder
      */
     public function run(): void
     {
-        $path = Storage::disk('public')->files(self::CSV_FILE);
-        FileService::convertProcess($path[0]);
+        $files = Storage::disk('public')->files(self::CSV_FILE);
+        FileService::convertProcess(storage_path('/app/public/') . $files[1]);
     }
 }

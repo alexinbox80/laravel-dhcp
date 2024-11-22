@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use \App\Http\Controllers\DhcpConfigController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,3 +16,5 @@ use Illuminate\Support\Facades\Route;
 
 //Thing test
 Route::get('/thing', '\App\Http\Controllers\ThingController@index')->name('thing.index');
+
+Route::resource('dhcp', DhcpConfigController::class);
