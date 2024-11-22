@@ -14,7 +14,4 @@ use \App\Http\Controllers\DhcpConfigController;
 |
 */
 
-//Thing test
-Route::get('/thing', '\App\Http\Controllers\ThingController@index')->name('thing.index');
-
 Route::resource('dhcp', DhcpConfigController::class);

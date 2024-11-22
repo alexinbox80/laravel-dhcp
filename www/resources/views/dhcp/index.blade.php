@@ -2,15 +2,15 @@
 @section('content')
     @php $message = "Test message"; @endphp
     <br>
-    <x-alert type="warning" :message="$message"></x-alert>
-    <x-alert type="success" :message="$message"></x-alert>
-    <x-alert type="primary" :message="$message"></x-alert>
-    <x-alert type="danger" :message="$message"></x-alert>
-    <x-alert type="info" :message="$message"></x-alert>
+    {{--    <x-alert type="warning" :message="$message"></x-alert>--}}
+    {{--    <x-alert type="success" :message="$message"></x-alert>--}}
+    {{--    <x-alert type="primary" :message="$message"></x-alert>--}}
+    {{--    <x-alert type="danger" :message="$message"></x-alert>--}}
+    {{--    <x-alert type="info" :message="$message"></x-alert>--}}
 
     <h2>Список ПЭВМ зарегистрированных в сети</h2>
     <div style="display: flex; justify-content: right;">
-{{--        <a href="{{ route('admin.news.create') }}" class="btn btn-primary">Добавить новость</a>--}}
+        <a href="{{ route('dhcp.create') }}" class="btn btn-primary">Добавить ПЭВМ в конфиг</a>
     </div><br>
     <div class="alert-message"></div><br>
     <div class="table-responsive">
@@ -29,21 +29,19 @@
             </tr>
             </thead>
             <tbody class="table-body">
-            @forelse($lists as $list)
-                <tr id="row-{{ $list->id }}">
-                    <td>{{ $list->id }}</td>
-                    <td>{{ $list->FLAG }}</td>
-                    <td>{{ $list->F }}</td>
-                    <td>{{ $list->I }}</td>
-                    <td>{{ $list->O }}</td>
-                    <td>{{ $list->IP }}</td>
-                    <td>{{ $list->MAC }}</td>
+            @forelse($hosts as $host)
+                <tr id="row-{{ $host->id }}">
+                    <td>{{ $host->id }}</td>
+                    <td>{{ $host->FLAG }}</td>
+                    <td>{{ $host->F }}</td>
+                    <td>{{ $host->I }}</td>
+                    <td>{{ $host->O }}</td>
+                    <td>{{ $host->IP }}</td>
+                    <td>{{ $host->MAC }}</td>
                     <td>
-{{--                        {{ route('admin.news.edit', ['news' => $news]) }}--}}
-
                         <div style="">
-                            <a href="">Ред.</a>&nbsp;
-                            <a href="javascript:;" class="delete" rel="{{ $list->id }}"
+                            <a href="{{ route('dhcp.edit', ['dhcp' => $host]) }}">Ред.</a>&nbsp;
+                            <a href="javascript:;" class="delete" rel="{{ $host->id }}"
                                style="color: red;">Уд.</a>
                         </div>
                     </td>
@@ -55,5 +53,86 @@
             @endforelse
             </tbody>
         </table>
-        {{ $lists->links() }}
-    </div>@endsection
+        {{ $hosts->links() }}
+    </div>
+@endsection
+
+@push('js')
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function () {
+
+            let elements = document.querySelectorAll(".delete");
+
+            elements.forEach(function (e, k) {
+                e.addEventListener("click", function () {
+                    const id = e.getAttribute('rel');
+
+                    console.log(`/dhcp/${id}`);
+
+                    send(`/dhcp/${id}`).then((result) => {
+
+                        const answer = JSON.parse(JSON.stringify(result));
+                        let alertBlock = document.querySelector('.alert-message');
+                        alertBlock.textContent = '';
+                        switch (answer.status.toLowerCase()) {
+                            case 'ok':
+                                console.log(JSON.stringify(result));
+                                const message = `Запись с #ID = ${id} успешно удалена`;
+                                renderBlock(alertBlock, message, 'success', 'beforeend');
+                                let removeRow = document.querySelector('#row-' + id);
+                                removeRow.remove();
+                                setTimeout("location.reload()", 2000);
+                                break;
+                            case 'error':
+                                console.log(JSON.stringify(result));
+                                const error = 'Возникла ошибка при удалении записи';
+                                renderBlock(alertBlock, error, 'danger', 'beforeend');
+                                break;
+                            default:
+                                console.log('Wrong Answer');
+                        }
+                    });
+                });
+            });
+        });
+
+        async function send(url) {
+            console.log(url);
+            let response = await fetch(url, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
+            })
+            // .then(res => {
+            //     if (res.ok) { console.log("HTTP request successful") }
+            //     else { console.log("HTTP request unsuccessful") }
+            //     return res
+            // })
+            // .then(res => console.log(res))
+            // .then(data => console.log(data))
+            // .catch(error => console.log(error))
+
+            let result = await response.json();
+            return result;
+        }
+
+        function getHtml(message, type = 'success') {
+            let alertContent;
+
+            alertContent = `<div class="alert alert-${type} alert-dismissible fade show">
+                                ${message}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>`;
+
+            return alertContent;
+        }
+
+        function renderBlock(container, message, type = 'success', target = 'afterbegin') {
+
+            container.insertAdjacentHTML(target, getHtml(message, type));
+
+            return true;
+        }
+    </script>
+@endpush
