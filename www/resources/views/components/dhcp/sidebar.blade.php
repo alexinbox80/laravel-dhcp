@@ -15,7 +15,7 @@
             <li class="nav-item">
                 <a class="nav-link @if(request()->routeIs('dhcp.index')) active @endif" aria-current="page" href="{{ route('dhcp.index') }}">
                     <span data-feather="home" class="align-text-bottom"></span>
-                    Панель управления
+                    Добавить ПЭВМ
                 </a>
             </li>
 {{--            <li class="nav-item">--}}

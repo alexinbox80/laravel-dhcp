@@ -23,7 +23,8 @@ return new class extends Migration
             $table->string('MAC', 17)->unique();
             $table->text('INFO')->nullable();
             $table->boolean('FLAG')->default(true)->nullable();
-            $table->timestamps();
+            $table->dateTime('DT_REG')->nullable();
+            $table->dateTime('DT_UPD')->nullable();
         });
     }
 

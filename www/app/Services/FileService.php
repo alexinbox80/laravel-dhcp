@@ -51,7 +51,9 @@ class FileService
                     'OLD_IP' => $row[8],
                     'MAC' => $row[6],
                     'INFO' => $row[7],
-                    'FLAG' => empty($row[11]) ?? false
+                    'FLAG' => empty($row[11]) ?? false,
+                    'DT_REG' => new \DateTime($row[9]),
+                    'DT_UPD' => new \DateTime($row[12])
                 ]);
         }
 

@@ -18,7 +18,7 @@ class DhcpConfigController extends Controller
     {
         $hosts = DhcpConfig::query()
             ->where('FLAG', true)
-            ->paginate(20);
+            ->paginate(45);
 
         return view('dhcp.index', ['hosts' => $hosts]);
     }

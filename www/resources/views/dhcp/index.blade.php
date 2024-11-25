@@ -20,11 +20,14 @@
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Включить</th>
-                <th scope="col">Наименование</th>
-                <th scope="col">Категория</th>
-                <th scope="col">Автор</th>
-                <th scope="col">Статус</th>
-                <th scope="col">Дата добавления</th>
+                <th scope="col">Фамилия</th>
+                <th scope="col">Имя</th>
+                <th scope="col">Отчество</th>
+                <th scope="col">Имя ПЭВМ</th>
+                <th scope="col">IP адрес</th>
+                <th scope="col">MAC адрес</th>
+                <th scope="col">IP предыдущий</th>
+                <th scope="col">Инфо</th>
                 <th scope="col">Управление</th>
             </tr>
             </thead>
@@ -32,12 +35,15 @@
             @forelse($hosts as $host)
                 <tr id="row-{{ $host->id }}">
                     <td>{{ $host->id }}</td>
-                    <td>{{ $host->FLAG }}</td>
+                    <td>{{ (bool)$host->FLAG ? 'Вкл.' : 'Выкл.' }}</td>
                     <td>{{ $host->F }}</td>
                     <td>{{ $host->I }}</td>
                     <td>{{ $host->O }}</td>
+                    <td>{{ $host->COMP }}</td>
                     <td>{{ $host->IP }}</td>
                     <td>{{ $host->MAC }}</td>
+                    <td>{{ $host->OLD_IP }}</td>
+                    <td>{{ $host->INFO }}</td>
                     <td>
                         <div style="">
                             <a href="{{ route('dhcp.edit', ['dhcp' => $host]) }}">Ред.</a>&nbsp;
@@ -48,7 +54,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="6">Новостей не найдено</td>
+                    <td colspan="11">Записей не найдено</td>
                 </tr>
             @endforelse
             </tbody>

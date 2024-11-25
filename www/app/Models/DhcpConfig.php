@@ -9,7 +9,13 @@ class DhcpConfig extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     //protected $table = 'CAB_IP';
+
+    //make on db side
+    //const CREATED_AT = 'DT_REG';
+    //const UPDATED_AT = 'DT_UPD';
 
     /**
      * The attributes that are mass assignable.
@@ -26,6 +32,8 @@ class DhcpConfig extends Model
         'MAC',
         'INFO',
         'OLD_IP',
-        'FLAG'
+        'FLAG',
+        'DT_REG',
+        'DT_UPD'
     ];
 }
