@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\DhcpConfigController;
 use \App\Http\Controllers\IndexController;
+use \App\Http\Controllers\MakeDhcpConfigController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,3 +19,5 @@ use \App\Http\Controllers\IndexController;
 Route::get('/', IndexController::class)->name('index');
 
 Route::resource('dhcp', DhcpConfigController::class);
+
+Route::get('dhcp/make/config', MakeDhcpConfigController::class)->name('make.config');

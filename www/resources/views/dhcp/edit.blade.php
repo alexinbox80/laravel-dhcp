@@ -37,22 +37,22 @@
             <br>
             <div class="form-group">
                 <label for="comp">Имя ПЭВМ</label>
-                <input type="text" class="form-control" name="COMP" id="comp" value="{{ $host->COMP }}">
+                <input type="text" class="form-control" name="COMP" id="comp" value="{{ $host->COMP }}" required>
             </div>
             <br>
             <div class="form-group">
                 <label for="ip_address">IP адрес</label>
-                <input type="text" class="form-control" name="IP" id="ip_address" value="{{ $host->IP }}">
+                <input type="text" class="form-control mask-ipv4" name="IP" id="ip_address" value="{{ $host->IP }}">
             </div>
             <br>
             <div class="form-group">
                 <label for="ild_ip_address">Старый IP адрес</label>
-                <input type="text" class="form-control" name="OLD_IP" id="old_ip_address" value="{{ $host->OLD_IP }}">
+                <input type="text" class="form-control mask-ipv4" name="OLD_IP" id="old_ip_address" value="{{ $host->OLD_IP }}">
             </div>
             <br>
             <div class="form-group">
                 <label for="mac_address">МАС адрес</label>
-                <input type="text" class="form-control" name="MAC" id="mac_address" value="{{ $host->MAC }}">
+                <input type="text" class="form-control mask-mac" name="MAC" id="mac_address" value="{{ $host->MAC }}">
             </div>
             <br>
             <div class="form-group">
@@ -64,3 +64,20 @@
         </form>
     </div>
 @endsection
+
+@push('js')
+    <script src="{{ asset('assets/js/jquery.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/js/jquery.maskedinput.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/js/jquery.input-ip-address-control-1.0.min.js') }}"></script>
+
+    <script>
+        jQuery(function($) {
+            // $('.mask-phone').mask('+7 (999) 999-99-99');
+
+            $.mask.definitions['h'] = '[A-Fa-f0-9]';
+            $('.mask-mac').mask('hh:hh:hh:hh:hh:hh');
+
+            $('.mask-ipv4').ipAddress();
+        });
+    </script>
+@endpush

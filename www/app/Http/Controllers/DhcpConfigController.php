@@ -6,7 +6,6 @@ use App\Http\Requests\DhcpConfig\CreateRequest;
 use App\Http\Requests\DhcpConfig\UpdateRequest;
 use App\Models\DhcpConfig;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
 
 class DhcpConfigController extends Controller
@@ -42,10 +41,10 @@ class DhcpConfigController extends Controller
 
         if($host->save()) {
             return redirect()->route('dhcp.index')
-                ->with('success', __('messages.admin.categories.create.success'));
+                ->with('success', __('messages.admin.host.create.success'));
         }
 
-        return back()->with('error', __('messages.admin.categories.create.fail'));
+        return back()->with('error', __('messages.admin.host.create.fail'));
     }
 
     /**
@@ -75,10 +74,10 @@ class DhcpConfigController extends Controller
 
         if($dhcp->save()) {
             return redirect()->route('dhcp.index')
-                ->with('success',  __('messages.admin.categories.update.success'));
+                ->with('success',  __('messages.admin.host.update.success'));
         }
 
-        return back()->with('error', __('messages.admin.categories.update.fail'));
+        return back()->with('error', __('messages.admin.host.update.fail'));
     }
 
     /**
@@ -90,9 +89,9 @@ class DhcpConfigController extends Controller
 
         if ( $host ) {
             return redirect()->route('dhcp.index')
-                ->with('success', __('messages.admin.categories.destroy.success'));
+                ->with('success', __('messages.admin.host.destroy.success'));
         }
 
-        return back()->with('error', __('messages.admin.categories.destroy.fail'));
+        return back()->with('error', __('messages.admin.host.destroy.fail'));
     }
 }
