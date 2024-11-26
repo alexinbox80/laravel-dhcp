@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Models\DhcpConfig;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class FileService
@@ -63,6 +63,9 @@ class FileService
     public static function makeDhcpConfig(string $filePath): bool
     {
         $fileDescriptor = fopen($filePath, "w");
+        if (!$fileDescriptor) {
+            throw new \Exception();
+        }
 
         fwrite($fileDescriptor, "authoritative;\n");
         fwrite($fileDescriptor, "ddns-update-style interim;\n");
@@ -198,20 +201,46 @@ class FileService
         fwrite($fileDescriptor, "\n");
 
 
+        /*
+        pgSql
 
-        $prev_subnet = "";
+            SELECT
+                id,
+                "COMP",
+                "IP",
+                "MAC",
+                TO_NUMBER(REGEXP_SUBSTR("IP", '\d+', 1, 3), '99G999D9S') subnet,
+                TO_NUMBER(REGEXP_SUBSTR("IP", '\d+', 1, 4), '99G999D9S') host
+            FROM
+                dhcp_configs
+            WHERE "IP" LIKE '%10.65.%'
+            ORDER BY
+                subnet, host;
 
-        $hosts = DhcpConfig::query()
-            ->where('IP', 'LIKE', "%10.65.%")
-            ->orderBy('IP', 'ASC')
-            //->orderBy('COMP', 'ASC')
-            ->get();
+         */
+
+        $query = "SELECT id, \"COMP\", \"IP\", \"MAC\",
+                        TO_NUMBER(REGEXP_SUBSTR(\"IP\", '\d+', 1, 3), '99G999D9S') subnet,
+                        TO_NUMBER(REGEXP_SUBSTR(\"IP\", '\d+', 1, 4), '99G999D9S') host
+                FROM
+                    dhcp_configs
+                WHERE \"IP\" LIKE '%10.65.%'
+                ORDER BY
+                    subnet, host;";
+
+        $hosts   =   DB::select($query);
+
+//        $hosts = DhcpConfig::query()
+//            ->where('IP', 'LIKE', "%10.64.%")
+//            //->orderBy('IP', 'ASC')
+//            //->orderBy('COMP', 'ASC')
+//            ->get();
+
+        $prevSubnet = "";
 
         foreach ($hosts as $host) {
-            $subnet = explode(".", $host->IP);
-
-            if ($subnet[2] != $prev_subnet) {
-                $prev_subnet = $subnet[2];
+            if ($host->subnet != $prevSubnet) {
+                $prevSubnet = $host->subnet;
                 fwrite($fileDescriptor, "\n# ------------------------- " . $host->IP . " ------------------------------------------ \n\n");
             }
 
@@ -224,23 +253,6 @@ class FileService
             fwrite($fileDescriptor, "; }");
             fwrite($fileDescriptor, "\n");
         }
-//        while ($row = oci_fetch_array($stq)) {
-//            if ($row[4] != $prev_subnet) {
-//                $prev_subnet = $row[4];
-//
-//                fwrite($fileDescriptor, "\n# ------------------------- ".$row[2]." ------------------------------------------ \n\n");
-//            }
-//
-//            fwrite($fileDescriptor, "host ");
-//            fwrite($fileDescriptor, $row[1]);
-//            fwrite($fileDescriptor, " { hardware ethernet ");
-//            fwrite($fileDescriptor, $row[3]);
-//            fwrite($fileDescriptor, "; fixed-address ");
-//            fwrite($fileDescriptor, $row[2]);
-//            fwrite($fileDescriptor, "; }");
-//            fwrite($fileDescriptor, "\n");
-//        }
-
 
         fwrite($fileDescriptor, "\n");
         fwrite($fileDescriptor, "allow members of \"10-64-101-1\";\n");
@@ -271,6 +283,30 @@ class FileService
         fwrite($fileDescriptor, "}\n");
 
         fclose($fileDescriptor);
+
+        return true;
+    }
+
+    public static function putDhcpConfig(): null | bool
+    {
+        $fileName = config('dhcpd.conf.fileName');
+        $localPath = config('dhcpd.conf.localPath');
+
+        $dhcpFile = Storage::disk('public')->get(
+            $localPath . '/' .
+            $fileName
+        );
+        if (!$dhcpFile) return $dhcpFile;
+
+        $currentMinute = date('i');
+
+        $result = Storage::disk('sftp')->put(
+                config('filesystems.disks.sftp.upload_path')
+                . '/'
+                . $fileName
+                . '.'
+                . $currentMinute, $dhcpFile);
+        if (!$result) return $result;
 
         return true;
     }

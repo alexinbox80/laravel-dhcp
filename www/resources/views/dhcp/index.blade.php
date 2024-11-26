@@ -10,6 +10,7 @@
 
     <h2>Список ПЭВМ зарегистрированных в сети</h2>
     <div style="display: flex; justify-content: right;">
+        <a href="{{ route('make.config') }}" class="btn btn-primary me-3">Создать конфигурационный файл</a>
         <a href="{{ route('dhcp.create') }}" class="btn btn-primary">Добавить ПЭВМ в конфиг</a>
     </div><br>
     <div class="alert-message"></div><br>

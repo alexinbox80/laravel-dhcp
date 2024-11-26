@@ -24,7 +24,7 @@ services:
             - ./nginx/nginx.conf:/etc/nginx/conf.d/dhcpdw.conf
             - ./log:/var/log/nginx-stable/
         ports:
-            - 82:80
+            - 88:80
         networks:
             - mynet
         restart: always
@@ -50,6 +50,26 @@ services:
             test: [ "CMD", "pg_isready", "-q", "-d", "${DB_DATABASE}", "-U", "${DB_USERNAME}" ]
             retries: 3
             timeout: 5s
+
+    #Sshd image
+    sshd_laravel_dhcp:
+        build:
+            dockerfile: docker/sshd/Dockerfile
+        image: 'sshd:v1'
+        container_name:
+            sshd_laravel_dhcp
+        ports:
+            - '${SSH_PORT:-22}:${DOCKER_SSH_PORT:-22}'
+
+        restart: always
+        tty: true
+
+        environment:
+            SERVICE_NAME: sshd
+
+        working_dir: '/home'
+        networks:
+            - mynet
 
 #Docker Networks
 networks:
