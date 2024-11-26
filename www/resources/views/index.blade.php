@@ -8,6 +8,8 @@
     {{--    <x-alert type="danger" :message="$message"></x-alert>--}}
     {{--    <x-alert type="info" :message="$message"></x-alert>--}}
 
+    @include('components.dhcp.filter')
+    <hr>
     <h2>Список ПЭВМ зарегистрированных в сети последними</h2>
 
     <div class="alert-message"></div><br>

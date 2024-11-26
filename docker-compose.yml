@@ -2,6 +2,8 @@
 services:
     php_laravel_dhcp:
         image: php:8.2.10-fpm
+        build:
+            dockerfile: docker/php/Dockerfile
         container_name: php_laravel_dhcp
         volumes:
             - ./www:/var/www/default/htdocs/
@@ -80,13 +82,3 @@ networks:
 volumes:
     pgsql:
         driver: local
-
-
-#    FROM php:5.6-fpm
-#
-#    RUN apt-get update
-#
-#  # Install Postgre PDO
-#    RUN apt-get install -y libpq-dev \
-#  && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
-#  && docker-php-ext-install pdo pdo_pgsql
