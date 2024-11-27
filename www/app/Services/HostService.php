@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Http\Requests\Host\CreateRequest;
 use App\Http\Requests\Host\UpdateRequest;
 use App\Repository\HostRepository;
-use App\Services\Contracts\Host as HostContract;
+use App\Services\Contracts\HostContract;
 use App\Models\Host;
 use App\Services\Filters\HostFilter;
 use Illuminate\Http\Request;
@@ -17,23 +17,34 @@ class HostService implements HostContract
      * @param Request $request
      * @return array
      */
-    public function index(Request $request): array
+    public function index(Request $request, string $typeRequest = 'web'): array
     {
-        $results = HostRepository::getSubnets();
+        $result = [];
 
-        $subnets = [];
-        foreach ($results as $result) {
-            $subnets[] = $result->byte1 . '.' . $result->byte2 . '.' . $result->byte3;
+        if ($typeRequest === 'web') {
+            $results = HostRepository::getSubnets();
+
+            $subnets = [];
+            foreach ($results as $result) {
+                $subnets[] = $result->byte1 . '.' . $result->byte2 . '.' . $result->byte3;
+            }
+
+            $hosts = Host::query();
+            $hosts = (new HostFilter($hosts, $request))
+                ->apply()
+                ->latest('DT_REG')
+                ->paginate(45)
+                ->appends(request()->query());
+
+            $result = ['hosts' => $hosts, 'subnets' => $subnets];
         }
 
-        $hosts = Host::query();
-        $hosts = (new HostFilter($hosts, $request))
-            ->apply()
-            ->orderBy('DT_UPD', 'DESC')
-            ->paginate(45)
-            ->appends(request()->query());
+        if ($typeRequest === 'api') {
+            $hosts = Host::query()->latest('DT_REG')->paginate(45);
+            $result = ['hosts' => $hosts];
+        }
 
-        return ['hosts' => $hosts, 'subnets' => $subnets];
+        return $result;
     }
 
     /**
@@ -46,7 +57,7 @@ class HostService implements HostContract
             $request->validated()
         );
 
-        if($host->save()) {
+        if ($host->save()) {
             return redirect()->route('host.index')
                 ->with('success', __('messages.admin.host.create.success'));
         }
@@ -63,9 +74,9 @@ class HostService implements HostContract
     {
         $host = $host->fill($request->validated());
 
-        if($host->save()) {
+        if ($host->save()) {
             return redirect()->route('host.index')
-                ->with('success',  __('messages.admin.host.update.success'));
+                ->with('success', __('messages.admin.host.update.success'));
         }
 
         return back()->with('error', __('messages.admin.host.update.fail'));
@@ -79,7 +90,7 @@ class HostService implements HostContract
     {
         $host = Host::destroy($host->id);
 
-        if ( $host ) {
+        if ($host) {
             return redirect()->route('host.index')
                 ->with('success', __('messages.admin.host.destroy.success'));
         }

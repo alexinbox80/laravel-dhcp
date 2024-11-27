@@ -4,11 +4,11 @@ namespace App\Services;
 
 use App\Models\Host;
 use App\Repository\HostRepository;
-use App\Services\Contracts\Index;
+use App\Services\Contracts\IndexContract;
 use App\Services\Filters\HostFilter;
 use Illuminate\Http\Request;
 
-class IndexService implements Index
+class IndexService implements IndexContract
 {
     public function index(Request $request): array
     {

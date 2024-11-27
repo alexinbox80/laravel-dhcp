@@ -8,13 +8,14 @@ use App\Http\Requests\Host\UpdateRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 
-interface Host
+interface HostContract
 {
     /**
      * @param Request $request
+     * @param string $typeRequest
      * @return array
      */
-    public function index(Request $request): array;
+    public function index(Request $request, string $typeRequest): array;
 
     /**
      * @param CreateRequest $request

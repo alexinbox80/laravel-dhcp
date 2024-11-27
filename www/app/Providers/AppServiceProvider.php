@@ -3,12 +3,12 @@
 namespace App\Providers;
 
 
-use App\Services\Contracts\Host;
-use App\Services\Contracts\Index;
-use App\Repository\Contracts\Host as HostRepositoryContract;
+use App\Services\Contracts\HostContract;
+use App\Services\Contracts\IndexContract;
+use App\Services\Contracts\ResponseContract;
 use App\Services\HostService;
 use App\Services\IndexService;
-use App\Repository\HostRepository;
+use App\Services\Response\ResponseService;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 
@@ -19,9 +19,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->app->bind(ResponseContract::class, ResponseService::class);
+
         //Services
-        $this->app->bind(Host::class, HostService::class);
-        $this->app->bind(Index::class, IndexService::class);
+        $this->app->bind(HostContract::class, HostService::class);
+        $this->app->bind(IndexContract::class, IndexService::class);
     }
 
     /**

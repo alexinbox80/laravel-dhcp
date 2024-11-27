@@ -75,7 +75,7 @@
         </table>
         <div class="row">
             <div class="col-md-5">
-                {{ $hosts->appends(request()->query())->links() }}
+                {{ $hosts->onEachSide(1)->appends(request()->query())->links() }}
             </div>
             <div class="col-md-5">
                 Displaying {{ $hosts->count() }} of {{ $hosts->total() }} hosts
