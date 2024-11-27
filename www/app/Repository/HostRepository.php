@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\DB;
 
 class HostRepository
 {
+    /**
+     * @return array
+     */
     public static function getSubnets(): array
     {
         /*
@@ -36,6 +39,43 @@ class HostRepository
                      byte2, byte3
                   ORDER BY
                      byte2, byte3;";
+
+        return DB::select($query);
+    }
+
+    /**
+     * @param string $subnet
+     * @return array
+     */
+    public static function getHosts(string $subnet): array
+    {
+        /*
+          pgSql
+
+              SELECT
+                  id,
+                  "COMP",
+                  "IP",
+                  "MAC",
+                  TO_NUMBER(REGEXP_SUBSTR("IP", '\d+', 1, 3), '99G999D9S') subnet,
+                  TO_NUMBER(REGEXP_SUBSTR("IP", '\d+', 1, 4), '99G999D9S') host
+              FROM
+                  hosts
+              WHERE "IP" LIKE '%10.65.%'
+              ORDER BY
+                  subnet, host;
+
+        */
+
+        $query = "SELECT
+                    id, \"COMP\", \"IP\", \"MAC\", \"FLAG\",
+                    TO_NUMBER(REGEXP_SUBSTR(\"IP\", '\d+', 1, 3), '99G999D9S') subnet,
+                    TO_NUMBER(REGEXP_SUBSTR(\"IP\", '\d+', 1, 4), '99G999D9S') host
+                FROM
+                    hosts
+                WHERE \"IP\" LIKE '%" . $subnet ."%' AND \"FLAG\" = true
+                ORDER BY
+                    subnet, host;";
 
         return DB::select($query);
     }

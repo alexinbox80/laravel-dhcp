@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Host;
+use App\Repository\HostRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -62,7 +63,7 @@ class FileService
 
     public static function makeDhcpConfig(string $filePath): bool
     {
-        $fileDescriptor = fopen($filePath, "w");
+        $fileDescriptor = fopen($filePath, 'w');
         if (!$fileDescriptor) {
             throw new \Exception();
         }
@@ -130,41 +131,8 @@ class FileService
 
         fwrite($fileDescriptor, "\n");
 
-        $query = "SELECT
-                    id, \"COMP\", \"IP\", \"MAC\", \"FLAG\",
-                    TO_NUMBER(REGEXP_SUBSTR(\"IP\", '\d+', 1, 3), '99G999D9S') subnet,
-                    TO_NUMBER(REGEXP_SUBSTR(\"IP\", '\d+', 1, 4), '99G999D9S') host
-                FROM
-                    hosts
-                WHERE \"IP\" LIKE '%10.65.%' AND \"FLAG\" = true
-                ORDER BY
-                    subnet, host;";
-
-        $hosts = DB::select($query);
-
-//        $hosts = DhcpConfig::query()
-//            ->where('IP', 'LIKE', "%10.64.%")
-//            //->orderBy('IP', 'ASC')
-//            //->orderBy('COMP', 'ASC')
-//            ->get();
-
-        $prevSubnet = "";
-
-        foreach ($hosts as $host) {
-            if ($host->subnet != $prevSubnet) {
-                $prevSubnet = $host->subnet;
-                fwrite($fileDescriptor, "\n# ------------------------- " . $host->IP . " ------------------------------------------ \n\n");
-            }
-
-            fwrite($fileDescriptor, "host ");
-            fwrite($fileDescriptor, $host->COMP);
-            fwrite($fileDescriptor, " { hardware ethernet ");
-            fwrite($fileDescriptor, $host->MAC);
-            fwrite($fileDescriptor, "; fixed-address ");
-            fwrite($fileDescriptor, $host->IP);
-            fwrite($fileDescriptor, "; }");
-            fwrite($fileDescriptor, "\n");
-        }
+        $hosts = HostRepository::getHosts('10.65.');
+        $result = self::writeHosts($fileDescriptor, $hosts);
 
         fwrite($fileDescriptor, "\n");
         fwrite($fileDescriptor, "\n} #group\n");
@@ -185,7 +153,6 @@ class FileService
 
         fwrite($fileDescriptor, "\n");
 
-
         fwrite($fileDescriptor, "subnet 10.64.0.0 netmask 255.255.0.0 {\n");
 
         fwrite($fileDescriptor, "\n");
@@ -193,7 +160,6 @@ class FileService
         fwrite($fileDescriptor, "\n");
         fwrite($fileDescriptor, "local-address 10.65.121.21;\n");
         fwrite($fileDescriptor, "\n");
-
 
         fwrite($fileDescriptor, "#log(info, \"*10.64*\");\n");
         fwrite($fileDescriptor, "\n");
@@ -207,8 +173,6 @@ class FileService
         fwrite($fileDescriptor, "	default-lease-time 259200;\n");
         fwrite($fileDescriptor, "\n");
 
-
-
         fwrite($fileDescriptor, "	# 7 sutok esli zaprosil\n");
         fwrite($fileDescriptor, "	max-lease-time 604800;\n");
         fwrite($fileDescriptor, "	option domain-name \"umvd.mvdrk.ru\";\n");
@@ -217,59 +181,8 @@ class FileService
         fwrite($fileDescriptor, "	option subnet-mask 255.255.255.0;\n");
         fwrite($fileDescriptor, "\n");
 
-
-        /*
-        pgSql
-
-            SELECT
-                id,
-                "COMP",
-                "IP",
-                "MAC",
-                TO_NUMBER(REGEXP_SUBSTR("IP", '\d+', 1, 3), '99G999D9S') subnet,
-                TO_NUMBER(REGEXP_SUBSTR("IP", '\d+', 1, 4), '99G999D9S') host
-            FROM
-                hosts
-            WHERE "IP" LIKE '%10.65.%'
-            ORDER BY
-                subnet, host;
-
-         */
-
-//        $query = "SELECT id, \"COMP\", \"IP\", \"MAC\",
-//                        TO_NUMBER(REGEXP_SUBSTR(\"IP\", '\d+', 1, 3), '99G999D9S') subnet,
-//                        TO_NUMBER(REGEXP_SUBSTR(\"IP\", '\d+', 1, 4), '99G999D9S') host
-//                FROM
-//                    hosts
-//                WHERE \"IP\" LIKE '%10.65.%'
-//                ORDER BY
-//                    subnet, host;";
-//
-//        $hosts   =   DB::select($query);
-//
-////        $hosts = DhcpConfig::query()
-////            ->where('IP', 'LIKE', "%10.64.%")
-////            //->orderBy('IP', 'ASC')
-////            //->orderBy('COMP', 'ASC')
-////            ->get();
-//
-//        $prevSubnet = "";
-//
-//        foreach ($hosts as $host) {
-//            if ($host->subnet != $prevSubnet) {
-//                $prevSubnet = $host->subnet;
-//                fwrite($fileDescriptor, "\n# ------------------------- " . $host->IP . " ------------------------------------------ \n\n");
-//            }
-//
-//            fwrite($fileDescriptor, "host ");
-//            fwrite($fileDescriptor, $host->COMP);
-//            fwrite($fileDescriptor, " { hardware ethernet ");
-//            fwrite($fileDescriptor, $host->MAC);
-//            fwrite($fileDescriptor, "; fixed-address ");
-//            fwrite($fileDescriptor, $host->IP);
-//            fwrite($fileDescriptor, "; }");
-//            fwrite($fileDescriptor, "\n");
-//        }
+        //$hosts = HostRepository::getHosts('10.64.');
+        //$result = self::writeHosts($fileDescriptor, $hosts);
 
         fwrite($fileDescriptor, "\n");
         fwrite($fileDescriptor, "allow members of \"10-64-101-1\";\n");
@@ -324,6 +237,28 @@ class FileService
                 . '.'
                 . $currentMinute, $dhcpFile);
         if (!$result) return $result;
+
+        return true;
+    }
+    private static function writeHosts(mixed $fileDescriptor, array $hosts): bool
+    {
+        $prevSubnet = "";
+
+        foreach ($hosts as $host) {
+            if ($host->subnet != $prevSubnet) {
+                $prevSubnet = $host->subnet;
+                fwrite($fileDescriptor, "\n# ------------------------- " . $host->IP . " ------------------------------------------ \n\n");
+            }
+
+            fwrite($fileDescriptor, "host ");
+            fwrite($fileDescriptor, $host->COMP);
+            fwrite($fileDescriptor, " { hardware ethernet ");
+            fwrite($fileDescriptor, $host->MAC);
+            fwrite($fileDescriptor, "; fixed-address ");
+            fwrite($fileDescriptor, $host->IP);
+            fwrite($fileDescriptor, "; }");
+            fwrite($fileDescriptor, "\n");
+        }
 
         return true;
     }
