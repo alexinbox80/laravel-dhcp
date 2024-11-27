@@ -6,6 +6,7 @@ class HostFilter extends QueryFilter
 {
     public function subnet($value): void
     {
+        $value .= '.';
         if (!is_null($value))
             $this->builder->where('IP', 'LIKE',  "%{$value}%");
     }

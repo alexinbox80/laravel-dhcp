@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Host\CreateRequest;
 use App\Http\Requests\Host\UpdateRequest;
 use App\Models\Host;
+use App\Services\HostService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\View;
 
@@ -13,14 +14,11 @@ class HostController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): View
+    public function index(HostService $hostService): View
     {
-        $hosts = Host::query()
-            ->where('FLAG', true)
-            ->orderBy('DT_UPD', 'DESC')
-            ->paginate(45);
+        $hosts = $hostService->index();
 
-        return view('host.index', ['hosts' => $hosts]);
+        return view('host.index', $hosts);
     }
 
     /**
@@ -34,18 +32,9 @@ class HostController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CreateRequest $request): RedirectResponse
+    public function store(HostService $hostService, CreateRequest $request): RedirectResponse
     {
-        $host = new Host(
-            $request->validated()
-        );
-
-        if($host->save()) {
-            return redirect()->route('host.index')
-                ->with('success', __('messages.admin.host.create.success'));
-        }
-
-        return back()->with('error', __('messages.admin.host.create.fail'));
+        return $hostService->store($request);
     }
 
     /**
@@ -69,30 +58,16 @@ class HostController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateRequest $request, Host $host): RedirectResponse
+    public function update(HostService $hostService, UpdateRequest $request, Host $host): RedirectResponse
     {
-        $host = $host->fill($request->validated());
-
-        if($host->save()) {
-            return redirect()->route('host.index')
-                ->with('success',  __('messages.admin.host.update.success'));
-        }
-
-        return back()->with('error', __('messages.admin.host.update.fail'));
+        return $hostService->update($request, $host);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Host $host): RedirectResponse
+    public function destroy(HostService $hostService,  $host): RedirectResponse
     {
-        $host = Host::destroy($host->id);
-
-        if ( $host ) {
-            return redirect()->route('host.index')
-                ->with('success', __('messages.admin.host.destroy.success'));
-        }
-
-        return back()->with('error', __('messages.admin.host.destroy.fail'));
+        return $hostService->destroy($host);
     }
 }
