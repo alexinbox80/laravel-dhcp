@@ -8,15 +8,16 @@ use App\Models\Host;
 use App\Services\HostService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
 
 class HostController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(HostService $hostService): View
+    public function index(HostService $hostService, Request $request): View
     {
-        $hosts = $hostService->index();
+        $hosts = $hostService->index($request);
 
         return view('host.index', $hosts);
     }

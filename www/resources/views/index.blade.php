@@ -8,7 +8,7 @@
     {{--    <x-alert type="danger" :message="$message"></x-alert>--}}
     {{--    <x-alert type="info" :message="$message"></x-alert>--}}
 
-    @include('components.host.filter')
+    @include('components.host.filter', ['route' => 'index'])
     <hr>
     <h2>Список ПЭВМ зарегистрированных в сети последними</h2>
 

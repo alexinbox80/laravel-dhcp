@@ -4,23 +4,36 @@ namespace App\Services;
 
 use App\Http\Requests\Host\CreateRequest;
 use App\Http\Requests\Host\UpdateRequest;
+use App\Repository\HostRepository;
 use App\Services\Contracts\Host as HostContract;
 use App\Models\Host;
+use App\Services\Filters\HostFilter;
+use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 
 class HostService implements HostContract
 {
     /**
+     * @param Request $request
      * @return array
      */
-    public function index(): array
+    public function index(Request $request): array
     {
-        $hosts = Host::query()
-            ->where('FLAG', true)
-            ->orderBy('DT_UPD', 'DESC')
-            ->paginate(45);
+        $results = HostRepository::getSubnets();
 
-        return ['hosts' => $hosts];
+        $subnets = [];
+        foreach ($results as $result) {
+            $subnets[] = $result->byte1 . '.' . $result->byte2 . '.' . $result->byte3;
+        }
+
+        $hosts = Host::query();
+        $hosts = (new HostFilter($hosts, $request))
+            ->apply()
+            ->orderBy('DT_UPD', 'DESC')
+            ->paginate(45)
+            ->appends(request()->query());
+
+        return ['hosts' => $hosts, 'subnets' => $subnets];
     }
 
     /**

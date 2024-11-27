@@ -18,12 +18,12 @@
                     Добавить ПЭВМ
                 </a>
             </li>
-{{--            <li class="nav-item">--}}
-{{--                <a class="nav-link @if(request()->routeIs('admin.categories.*')) active @endif" href="{{ route('admin.categories.index') }}">--}}
-{{--                    <span data-feather="folder" class="align-text-bottom"></span>--}}
-{{--                    Категории--}}
-{{--                </a>--}}
-{{--            </li>--}}
+            <li class="nav-item">
+                <a class="nav-link @if(request()->routeIs('index')) active @endif" href="{{ route('index') }}">
+                    <span data-feather="folder" class="align-text-bottom"></span>
+                    Главная страница
+                </a>
+            </li>
 {{--            <li class="nav-item">--}}
 {{--                <a class="nav-link @if(request()->routeIs('admin.news.*')) active @endif" href="{{ route('admin.news.index') }}">--}}
 {{--                    <span data-feather="file" class="align-text-bottom"></span>--}}

@@ -1,7 +1,7 @@
 <div class="">
     <h4>Фильтровать по:</h4>
 </div>
-<form action="{{ route('index') }} ">
+<form action="{{ route($route) }} ">
     <div class="row">
         <div class="col-md-3">
             <label class="form-label" for="enable-hosts">Включить/Отключить</label>
@@ -25,7 +25,7 @@
                 @endforeach
             </select>
         </div>
-        <div class="col-md d-flex justify-content-end">
+        <div class="col-md-2 d-flex">
             <button type="submit" class="btn btn-primary mt-4">Фильтровать</button>
         </div>
     </div>

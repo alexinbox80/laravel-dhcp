@@ -13,6 +13,19 @@
         <a href="{{ route('make.config') }}" class="btn btn-primary me-3">Создать конфигурационный файл</a>
         <a href="{{ route('host.create') }}" class="btn btn-primary">Добавить ПЭВМ</a>
     </div><br>
+{{--    <div class="row">--}}
+{{--        <div class="col-md-6">--}}
+{{--            @include('components.host.filter', ['route' => 'host.index'])--}}
+{{--        </div>--}}
+{{--        <div class="col-md-3">--}}
+{{--            <a href="{{ route('make.config') }}" class="btn btn-primary me-3">Создать конфигурационный файл</a>--}}
+{{--        </div>--}}
+{{--        <div class="col-md-3">--}}
+{{--            <a href="{{ route('host.create') }}" class="btn btn-primary">Добавить ПЭВМ</a>--}}
+{{--        </div>--}}
+{{--    </div>--}}
+    @include('components.host.filter', ['route' => 'host.index'])
+    <hr>
     <div class="alert-message"></div><br>
     <div class="table-responsive">
         @include('inc.message')
@@ -62,7 +75,7 @@
         </table>
         <div class="row">
             <div class="col-md-5">
-                {{ $hosts->links() }}
+                {{ $hosts->appends(request()->query())->links() }}
             </div>
             <div class="col-md-5">
                 Displaying {{ $hosts->count() }} of {{ $hosts->total() }} hosts
