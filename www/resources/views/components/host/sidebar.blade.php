@@ -13,7 +13,7 @@
                 </li>
 {{--            @endisset--}}
             <li class="nav-item">
-                <a class="nav-link @if(request()->routeIs('dhcp.index')) active @endif" aria-current="page" href="{{ route('dhcp.index') }}">
+                <a class="nav-link @if(request()->routeIs('host.index')) active @endif" aria-current="page" href="{{ route('host.index') }}">
                     <span data-feather="home" class="align-text-bottom"></span>
                     Добавить ПЭВМ
                 </a>

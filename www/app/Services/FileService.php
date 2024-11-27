@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\DhcpConfig;
+use App\Models\Host;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -41,7 +41,7 @@ class FileService
     {
         foreach (self::convertCsv($filePath) as $row) {
             if (!empty($row))
-                DhcpConfig::create([
+                Host::create([
                     'CAB' => empty($row[0]) ? null : $row[0],
                     'F' => $row[1],
                     'I' => $row[2],
@@ -134,7 +134,7 @@ class FileService
                         TO_NUMBER(REGEXP_SUBSTR(\"IP\", '\d+', 1, 3), '99G999D9S') subnet,
                         TO_NUMBER(REGEXP_SUBSTR(\"IP\", '\d+', 1, 4), '99G999D9S') host
                 FROM
-                    dhcp_configs
+                    hosts
                 WHERE \"IP\" LIKE '%10.65.%'
                 ORDER BY
                     subnet, host;";
@@ -228,7 +228,7 @@ class FileService
                 TO_NUMBER(REGEXP_SUBSTR("IP", '\d+', 1, 3), '99G999D9S') subnet,
                 TO_NUMBER(REGEXP_SUBSTR("IP", '\d+', 1, 4), '99G999D9S') host
             FROM
-                dhcp_configs
+                hosts
             WHERE "IP" LIKE '%10.65.%'
             ORDER BY
                 subnet, host;
@@ -239,7 +239,7 @@ class FileService
 //                        TO_NUMBER(REGEXP_SUBSTR(\"IP\", '\d+', 1, 3), '99G999D9S') subnet,
 //                        TO_NUMBER(REGEXP_SUBSTR(\"IP\", '\d+', 1, 4), '99G999D9S') host
 //                FROM
-//                    dhcp_configs
+//                    hosts
 //                WHERE \"IP\" LIKE '%10.65.%'
 //                ORDER BY
 //                    subnet, host;";

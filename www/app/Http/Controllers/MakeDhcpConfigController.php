@@ -21,7 +21,7 @@ class MakeDhcpConfigController extends Controller
 
         $result = FileService::makeDhcpConfig($file);
 
-        return redirect()->route('dhcp.index')
+        return redirect()->route('host.index')
             ->with('success', __('messages.admin.made.config.success'));
     }
 }

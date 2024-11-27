@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\DhcpConfig;
+namespace App\Http\Requests\Host;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -27,10 +27,10 @@ class CreateRequest extends FormRequest
             'F' => ['nullable', 'string', 'min:3', 'max:255'],
             'I' => ['nullable', 'string', 'min:3', 'max:255'],
             'O' => ['nullable', 'string', 'min:3', 'max:255'],
-            'COMP' => ['required', 'string', 'min:3', 'max:255', 'exists:CAB_IP,COMP'],
-            'IP' => ['required', 'string', 'ipv4', 'exists:CAB_IP,IP'],
+            'COMP' => ['required', 'string', 'min:3', 'max:255', 'unique:App\Models\Host,COMP'],
+            'IP' => ['required', 'string', 'ipv4', 'unique:App\Models\Host,IP'],
             'OLD_IP' => ['nullable', 'string', 'ipv4'],
-            'MAC' => ['required', 'string', 'mac_address', 'exists:CAB_IP,MAC'],
+            'MAC' => ['required', 'string', 'mac_address', 'unique:App\Models\Host,MAC'],
             'INFO' => ['nullable', 'string', 'min:3'],
         ];
     }

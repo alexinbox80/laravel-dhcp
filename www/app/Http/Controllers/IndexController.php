@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DhcpConfig;
+use App\Models\Host;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Contracts\View\View;
@@ -37,7 +37,7 @@ class IndexController extends Controller
                     TO_NUMBER(REGEXP_SUBSTR(\"IP\", '\d+', 1, 3), '99G999D9S') AS byte3,
                     TO_NUMBER('0', '99G999D9S') AS byte4
                   FROM
-                    dhcp_configs
+                    hosts
                   GROUP BY
                      byte2, byte3
                   ORDER BY
@@ -50,7 +50,7 @@ class IndexController extends Controller
             $subnets[] = $result->byte1 . '.' . $result->byte2 . '.' . $result->byte3;
         }
 
-        $hosts = DhcpConfig::query()->orderBy('DT_REG', 'desc')->take('45')->get();
+        $hosts = Host::query()->orderBy('DT_REG', 'desc')->take('45')->get();
         return view('index', ['subnets' => $subnets, 'hosts' => $hosts]);
     }
 }

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('dhcp_configs', function (Blueprint $table) {
+        Schema::create('hosts', function (Blueprint $table) {
             $table->id();
             $table->smallInteger('CAB')->nullable();
             $table->string('F')->nullable();
@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('dhcp_configs');
+        Schema::dropIfExists('hosts');
     }
 };

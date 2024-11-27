@@ -6,7 +6,7 @@ use App\Services\FileService;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Seeder;
 
-class DhcpConfigSeeder extends Seeder
+class HostSeeder extends Seeder
 {
     /**
      * Run the database seeds.

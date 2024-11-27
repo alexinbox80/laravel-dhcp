@@ -1,7 +1,7 @@
 <div class="">
     <h4>Фильтровать по:</h4>
 </div>
-<form action="{{ route('dhcp.index') }} ">
+<form action="{{ route('host.index') }} ">
     <div class="row">
         <div class="col-md-3">
             <label class="form-label" for="enable-hosts">Активность</label>
@@ -16,7 +16,7 @@
                 <option value=""></option>
                 @foreach ($subnets as $subnet)
                     <option value="{{ $subnet }}">
-                        {{ $subnet }}
+                        {{ $subnet.'.0' }}
                     </option>
                 @endforeach
             </select>

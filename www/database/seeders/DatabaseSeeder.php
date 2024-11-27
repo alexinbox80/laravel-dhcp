@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call(
-            DhcpConfigSeeder::class
+            HostSeeder::class
         );
     }
 }

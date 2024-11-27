@@ -1,4 +1,4 @@
-@extends('layouts.dhcp')
+@extends('layouts.host')
 @section('content')
     @php $message = "Test message"; @endphp
     <br>
@@ -11,7 +11,7 @@
     <h2>Список ПЭВМ зарегистрированных в сети</h2>
     <div style="display: flex; justify-content: right;">
         <a href="{{ route('make.config') }}" class="btn btn-primary me-3">Создать конфигурационный файл</a>
-        <a href="{{ route('dhcp.create') }}" class="btn btn-primary">Добавить ПЭВМ в конфиг</a>
+        <a href="{{ route('host.create') }}" class="btn btn-primary">Добавить ПЭВМ</a>
     </div><br>
     <div class="alert-message"></div><br>
     <div class="table-responsive">
@@ -47,7 +47,7 @@
                     <td>{{ $host->INFO }}</td>
                     <td>
                         <div style="">
-                            <a href="{{ route('dhcp.edit', ['dhcp' => $host]) }}">Ред.</a>&nbsp;
+                            <a href="{{ route('host.edit', ['host' => $host]) }}">Ред.</a>&nbsp;
                             <a href="javascript:;" class="delete" rel="{{ $host->id }}"
                                style="color: red;">Уд.</a>
                         </div>

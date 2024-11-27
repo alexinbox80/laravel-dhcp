@@ -1,4 +1,4 @@
-@extends('layouts.dhcp')
+@extends('layouts.host')
 @section('content')
     @php $message = "Test message"; @endphp
     <br>
@@ -8,7 +8,7 @@
     {{--    <x-alert type="danger" :message="$message"></x-alert>--}}
     {{--    <x-alert type="info" :message="$message"></x-alert>--}}
 
-    @include('components.dhcp.filter')
+    @include('components.host.filter')
     <hr>
     <h2>Список ПЭВМ зарегистрированных в сети последними</h2>
 
