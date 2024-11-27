@@ -130,12 +130,13 @@ class FileService
 
         fwrite($fileDescriptor, "\n");
 
-        $query = "SELECT id, \"COMP\", \"IP\", \"MAC\",
-                        TO_NUMBER(REGEXP_SUBSTR(\"IP\", '\d+', 1, 3), '99G999D9S') subnet,
-                        TO_NUMBER(REGEXP_SUBSTR(\"IP\", '\d+', 1, 4), '99G999D9S') host
+        $query = "SELECT
+                    id, \"COMP\", \"IP\", \"MAC\", \"FLAG\",
+                    TO_NUMBER(REGEXP_SUBSTR(\"IP\", '\d+', 1, 3), '99G999D9S') subnet,
+                    TO_NUMBER(REGEXP_SUBSTR(\"IP\", '\d+', 1, 4), '99G999D9S') host
                 FROM
                     hosts
-                WHERE \"IP\" LIKE '%10.65.%'
+                WHERE \"IP\" LIKE '%10.65.%' AND \"FLAG\" = true
                 ORDER BY
                     subnet, host;";
 

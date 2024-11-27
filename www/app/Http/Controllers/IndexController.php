@@ -6,6 +6,7 @@ use App\Models\Host;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Contracts\View\View;
+use App\Services\Filters\HostFilter;
 
 class IndexController extends Controller
 {
@@ -50,7 +51,13 @@ class IndexController extends Controller
             $subnets[] = $result->byte1 . '.' . $result->byte2 . '.' . $result->byte3;
         }
 
-        $hosts = Host::query()->orderBy('DT_REG', 'desc')->take('45')->get();
+        $hosts = Host::query();
+        $hosts = (new HostFilter($hosts, $request))
+            ->apply()
+            ->orderBy('DT_REG', 'desc')
+            ->take(45)
+            ->get();
+
         return view('index', ['subnets' => $subnets, 'hosts' => $hosts]);
     }
 }

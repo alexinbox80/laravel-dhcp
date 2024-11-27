@@ -19,7 +19,7 @@
             <thead>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">Активность</th>
+                <th scope="col">Включить</th>
                 <th scope="col">Фамимлия</th>
                 <th scope="col">Имя</th>
                 <th scope="col">Отчество</th>
@@ -34,7 +34,7 @@
             @forelse($hosts as $host)
                 <tr id="row-{{ $host->id }}">
                     <td>{{ $host->id }}</td>
-                    <td>{{ (bool)$host->FLAG ? 'true' : 'false' }}</td>
+                    <td>{{ (bool)$host->FLAG ? 'Вкл.' : 'Выкл.' }}</td>
                     <td>{{ $host->F }}</td>
                     <td>{{ $host->I }}</td>
                     <td>{{ $host->O }}</td>

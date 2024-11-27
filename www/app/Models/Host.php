@@ -14,8 +14,8 @@ class Host extends Model
     //protected $table = 'CAB_IP';
 
     //make on db side
-    //const CREATED_AT = 'DT_REG';
-    //const UPDATED_AT = 'DT_UPD';
+    const CREATED_AT = 'DT_REG';
+    const UPDATED_AT = 'DT_UPD';
 
     /**
      * The attributes that are mass assignable.
