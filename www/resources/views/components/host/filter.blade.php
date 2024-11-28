@@ -26,7 +26,7 @@
             </select>
         </div>
         <div class="col-md-2 d-flex">
-            <button type="submit" class="btn btn-primary mt-4">Фильтровать</button>
+            <button type="submit" class="btn btn-primary mt-auto">Фильтровать</button>
         </div>
     </div>
 </form>

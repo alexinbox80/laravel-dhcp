@@ -1,7 +1,7 @@
 @extends('layouts.host')
 @section('content')
-    @php $message = "Test message"; @endphp
-    <br>
+{{--    @php $message = "Test message"; @endphp--}}
+{{--    <br>--}}
     {{--    <x-alert type="warning" :message="$message"></x-alert>--}}
     {{--    <x-alert type="success" :message="$message"></x-alert>--}}
     {{--    <x-alert type="primary" :message="$message"></x-alert>--}}

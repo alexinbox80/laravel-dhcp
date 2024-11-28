@@ -1,6 +1,6 @@
 @extends('layouts.host')
 @section('content')
-    @php $message = "Test message"; @endphp
+{{--    @php $message = "Test message"; @endphp--}}
     <br>
     {{--    <x-alert type="warning" :message="$message"></x-alert>--}}
     {{--    <x-alert type="success" :message="$message"></x-alert>--}}
@@ -9,22 +9,15 @@
     {{--    <x-alert type="info" :message="$message"></x-alert>--}}
 
     <h2>Список ПЭВМ зарегистрированных в сети</h2>
-    <div style="display: flex; justify-content: right;">
-        <a href="{{ route('make.config') }}" class="btn btn-primary me-3">Создать конфигурационный файл</a>
-        <a href="{{ route('host.create') }}" class="btn btn-primary">Добавить ПЭВМ</a>
-    </div><br>
-{{--    <div class="row">--}}
-{{--        <div class="col-md-6">--}}
-{{--            @include('components.host.filter', ['route' => 'host.index'])--}}
-{{--        </div>--}}
-{{--        <div class="col-md-3">--}}
-{{--            <a href="{{ route('make.config') }}" class="btn btn-primary me-3">Создать конфигурационный файл</a>--}}
-{{--        </div>--}}
-{{--        <div class="col-md-3">--}}
-{{--            <a href="{{ route('host.create') }}" class="btn btn-primary">Добавить ПЭВМ</a>--}}
-{{--        </div>--}}
-{{--    </div>--}}
-    @include('components.host.filter', ['route' => 'host.index'])
+    <div class="row">
+        <div class="col-md-7">
+            @include('components.host.filter', ['route' => 'host.index'])
+        </div>
+        <div class="col-md-5 d-flex justify-content-end mt-auto">
+            <a href="{{ route('make.config') }}" class="btn btn-primary me-3">Создать конфигурационный файл</a>
+            <a href="{{ route('host.create') }}" class="btn btn-primary">Добавить ПЭВМ</a>
+        </div>
+    </div>
     <hr>
     <div class="alert-message"></div><br>
     <div class="table-responsive">
