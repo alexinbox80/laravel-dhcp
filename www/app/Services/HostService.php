@@ -11,6 +11,9 @@ use App\Services\Filters\HostFilter;
 use App\Services\Helpers\Subnet;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Log;
 
 class HostService implements HostContract
 {
@@ -82,17 +85,20 @@ class HostService implements HostContract
 
     /**
      * @param Host $host
-     * @return RedirectResponse
+     * @return JsonResponse
      */
-    public function destroy(Host $host): RedirectResponse
+    public function destroy(Host $host): JsonResponse
     {
-        $host = Host::destroy($host->id);
-
-        if ($host) {
-            return redirect()->route('host.index')
-                ->with('success', __('messages.admin.host.destroy.success'));
+        try {
+            $deleted = $host->delete();
+            if ( $deleted === false) {
+                return \response()->json(['status' => 'error'], Response::HTTP_BAD_REQUEST);
+            } else {
+                return \response()->json(['status' => 'ok']);
+            }
+        } catch (\Exception $e) {
+            Log::error($e->getMessage() . ' ' . $e->getCode());
+            return \response()->json(['status' => 'error'], Response::HTTP_BAD_REQUEST);
         }
-
-        return back()->with('error', __('messages.admin.host.destroy.fail'));
     }
 }

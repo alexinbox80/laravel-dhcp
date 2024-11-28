@@ -19,9 +19,10 @@
         </div>
     </div>
     <hr>
-    <div class="alert-message"></div><br>
-    <div class="table-responsive">
+    <div class="alert-message">
         @include('inc.message')
+    </div><br>
+    <div class="table-responsive">
         <table class="table table-striped table-sm">
             <thead>
             <tr>
@@ -78,7 +79,15 @@
 @endsection
 
 @push('js')
+    <script src="{{ asset('assets/js/jquery.min.js') }}" type="text/javascript"></script>
+
     <script type="text/javascript">
+        window.setTimeout(function() {
+            $('.alert').fadeTo(500, 0).slideUp(500, function() {
+                $(this).remove();
+            });
+        }, 2000);
+
         document.addEventListener("DOMContentLoaded", function () {
 
             let elements = document.querySelectorAll(".delete");
@@ -87,9 +96,9 @@
                 e.addEventListener("click", function () {
                     const id = e.getAttribute('rel');
 
-                    console.log(`/dhcp/${id}`);
+                    console.log(`/host/${id}`);
 
-                    send(`/dhcp/${id}`).then((result) => {
+                    send(`/host/${id}`).then((result) => {
 
                         const answer = JSON.parse(JSON.stringify(result));
                         let alertBlock = document.querySelector('.alert-message');

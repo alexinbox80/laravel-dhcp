@@ -5,6 +5,7 @@ namespace App\Services\Contracts;
 use App\Models\Host as HostModel;
 use App\Http\Requests\Host\CreateRequest;
 use App\Http\Requests\Host\UpdateRequest;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 
@@ -32,7 +33,7 @@ interface HostContract
 
     /**
      * @param HostModel $host
-     * @return RedirectResponse
+     * @return JsonResponse
      */
-    public function destroy(HostModel $host): RedirectResponse;
+    public function destroy(HostModel$host): JsonResponse;
 }
