@@ -50,55 +50,103 @@ class HostService implements HostContract
 
     /**
      * @param CreateRequest $request
-     * @return RedirectResponse
+     * @param string $typeRequest
+     * @return RedirectResponse|Host
      */
-    public function store(CreateRequest $request): RedirectResponse
+    public function store(CreateRequest $request, string $typeRequest = 'web'): RedirectResponse | Host
     {
         $host = new Host(
             $request->validated()
         );
 
-        if ($host->save()) {
-            return redirect()->route('host.index')
-                ->with('success', __('messages.admin.host.create.success'));
+        $result = null;
+
+        if ($typeRequest === 'web') {
+            if ($host->save()) {
+                $result = redirect()->route('host.index')
+                    ->with('success', __('messages.admin.host.create.success'));
+            }
+
+            $result = back()->with('error', __('messages.admin.host.create.fail'));
         }
 
-        return back()->with('error', __('messages.admin.host.create.fail'));
+        if ($typeRequest === 'api') {
+            $host->save();
+            $result = $host->refresh();
+        }
+
+        return $result;
     }
 
     /**
      * @param UpdateRequest $request
      * @param Host $host
-     * @return RedirectResponse
+     * @param string $typeRequest
+     * @return RedirectResponse|array|null
      */
-    public function update(UpdateRequest $request, Host $host): RedirectResponse
+    public function update(UpdateRequest $request, Host $host, string $typeRequest = 'web'): RedirectResponse | array | null
     {
         $host = $host->fill($request->validated());
 
-        if ($host->save()) {
-            return redirect()->route('host.index')
-                ->with('success', __('messages.admin.host.update.success'));
+        $result = null;
+        if ($typeRequest === 'web') {
+            if ($host->save()) {
+                $result = redirect()->route('host.index')
+                    ->with('success', __('messages.admin.host.update.success'));
+            }
+
+            $result = back()->with('error', __('messages.admin.host.update.fail'));
         }
 
-        return back()->with('error', __('messages.admin.host.update.fail'));
+        if ($typeRequest === 'api') {
+            if ($host->save()) {
+                $result = ['data' => $host->refresh()];
+            } else
+                $result = null;
+        }
+
+        return $result;
     }
 
     /**
-     * @param Host $host
-     * @return JsonResponse
+     * @param int $host
+     * @param string $requestType
+     * @return Host[]|null
      */
-    public function destroy(Host $host): JsonResponse
+    public function show(int $host, string $requestType = 'api'): array | null
+    {
+        $result = [];
+        if ($requestType === 'api')
+            $host = Host::query()->find($host);
+            if (!is_null($host)) {
+                $result = ['data' => $host];
+            } else
+                $result = null;
+
+        return $result;
+    }
+
+    /**
+     * @param int $host
+     * @return JsonResponse | bool
+     */
+    public function destroy(int $host, string $typeRequest = 'web'): JsonResponse | bool
     {
         try {
-            $deleted = $host->delete();
-            if ( $deleted === false) {
-                return \response()->json(['status' => 'error'], Response::HTTP_BAD_REQUEST);
-            } else {
-                return \response()->json(['status' => 'ok']);
+            $deleted = Host::destroy($host);
+            if ($typeRequest === 'web') {
+                if ( $deleted === false) {
+                    return \response()->json(['status' => 'error'], Response::HTTP_BAD_REQUEST);
+                } else {
+                    return \response()->json(['status' => 'ok']);
+                }
+            }
+            if ($typeRequest === 'api') {
+                return $deleted;
             }
         } catch (\Exception $e) {
             Log::error($e->getMessage() . ' ' . $e->getCode());
-            return \response()->json(['status' => 'error'], Response::HTTP_BAD_REQUEST);
+            //return \response()->json(['status' => 'error'], Response::HTTP_BAD_REQUEST);
         }
     }
 }

@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\HostController;
+use App\Http\Controllers\Api\V1\SubnetController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,3 +21,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::apiResource('/host', HostController::class);
+Route::apiResource('/subnets', SubnetController::class)
+    ->only([
+        'index',
+    ])->names([
+        'subnets.index'
+    ]);;

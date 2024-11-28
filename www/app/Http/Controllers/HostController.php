@@ -68,7 +68,7 @@ class HostController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(HostService $hostService, Host $host): JsonResponse
+    public function destroy(HostService $hostService, int $host): JsonResponse
     {
         return $hostService->destroy($host);
     }

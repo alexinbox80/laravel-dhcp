@@ -2,6 +2,7 @@
 
 namespace App\Services\Contracts;
 
+use App\Http\Controllers\Api\V1\HostController;
 use App\Models\Host as HostModel;
 use App\Http\Requests\Host\CreateRequest;
 use App\Http\Requests\Host\UpdateRequest;
@@ -20,20 +21,28 @@ interface HostContract
 
     /**
      * @param CreateRequest $request
-     * @return RedirectResponse
+     * @return RedirectResponse | HostModel
      */
-    public function store(CreateRequest $request): RedirectResponse;
+    public function store(CreateRequest $request): RedirectResponse | HostModel;
 
     /**
      * @param UpdateRequest $request
      * @param HostModel $host
-     * @return RedirectResponse
+     * @param string $typeRequest
+     * @return RedirectResponse|array|null
      */
-    public function update(UpdateRequest $request, HostModel $host): RedirectResponse;
+    public function update(UpdateRequest $request, HostModel $host, string $typeRequest = 'web'): RedirectResponse | array | null;
 
     /**
-     * @param HostModel $host
-     * @return JsonResponse
+     * @param int $host
+     * @param string $requestType
+     * @return array|null
      */
-    public function destroy(HostModel$host): JsonResponse;
+    public function show(int $host, string $requestType = 'api'): array | null;
+
+    /**
+     * @param int $host
+     * @return JsonResponse | bool
+     */
+    public function destroy(int $host): JsonResponse | bool;
 }
