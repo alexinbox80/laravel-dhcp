@@ -8,6 +8,7 @@ use App\Repository\HostRepository;
 use App\Services\Contracts\HostContract;
 use App\Models\Host;
 use App\Services\Filters\HostFilter;
+use App\Services\Helpers\Subnet;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 
@@ -24,10 +25,7 @@ class HostService implements HostContract
         if ($typeRequest === 'web') {
             $results = HostRepository::getSubnets();
 
-            $subnets = [];
-            foreach ($results as $result) {
-                $subnets[] = $result->byte1 . '.' . $result->byte2 . '.' . $result->byte3;
-            }
+            $subnets = (new Subnet)($results);
 
             $hosts = Host::query();
             $hosts = (new HostFilter($hosts, $request))

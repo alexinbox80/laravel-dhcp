@@ -6,6 +6,7 @@ use App\Models\Host;
 use App\Repository\HostRepository;
 use App\Services\Contracts\IndexContract;
 use App\Services\Filters\HostFilter;
+use App\Services\Helpers\Subnet;
 use Illuminate\Http\Request;
 
 class IndexService implements IndexContract
@@ -14,10 +15,7 @@ class IndexService implements IndexContract
     {
         $results = HostRepository::getSubnets();
 
-        $subnets = [];
-        foreach ($results as $result) {
-            $subnets[] = $result->byte1 . '.' . $result->byte2 . '.' . $result->byte3;
-        }
+        $subnets = (new Subnet)($results);
 
         $hosts = Host::query();
         $hosts = (new HostFilter($hosts, $request))
