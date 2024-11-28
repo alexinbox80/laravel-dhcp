@@ -1,5 +1,5 @@
 <?php
-//messages.admin.made.config.success
+
 return [
     'admin' => [
         'host' => [
