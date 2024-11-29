@@ -2,8 +2,9 @@
 
 return [
     'conf' => [
-        'fileName' => env('DHCPD_FILENAME', 'dhcpd.conf'),
-        'csvFile' => env('CSV_FILENAME', 'cab_ip.csv'),
-        'localPath' => env('DHCPD_LOCAL_PATH', '/data'),
+        'fileName' => env('DHCP_FILENAME', 'dhcpd.config'),
+        'useDate' => true,
+        'csvFile' => env('DHCP_CSV_FILENAME', 'cab_ip.csv'),
+        'localPath' => env('DHCP_LOCAL_PATH', '/data'),
     ]
 ];

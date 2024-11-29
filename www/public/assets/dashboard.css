@@ -97,6 +97,6 @@ body {
 
 .alert-message {
     position: absolute;
-    left: calc(100% / 2);
-    top: -200px;
+    top: -9rem;
+    right: 0;
 }

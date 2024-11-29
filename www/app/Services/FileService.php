@@ -223,19 +223,21 @@ class FileService
         $localPath = config('dhcpd.conf.localPath');
 
         $dhcpFile = Storage::disk('public')->get(
-            $localPath . '/' .
+            $localPath . DIRECTORY_SEPARATOR .
             $fileName
         );
         if (!$dhcpFile) return $dhcpFile;
 
-        $currentMinute = date('i');
+        $currentMinute = '';
+        if (config('dhcpd.conf.useDate'))
+            $currentMinute = '.' . date('i');
 
         $result = Storage::disk('sftp')->put(
                 config('filesystems.disks.sftp.upload_path')
-                . '/'
+                . DIRECTORY_SEPARATOR
                 . $fileName
-                . '.'
                 . $currentMinute, $dhcpFile);
+
         if (!$result) return $result;
 
         return true;

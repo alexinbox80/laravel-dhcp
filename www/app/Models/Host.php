@@ -11,6 +11,8 @@ class Host extends Model
 
     public $timestamps = false;
 
+    //protected $connection = 'oracle';
+
     //protected $table = 'CAB_IP';
 
     //make on db side

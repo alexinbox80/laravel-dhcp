@@ -31,7 +31,7 @@ services:
             - mynet
         restart: always
 
-    #Postgre Service
+    #postgre service
     pgsql_laravel_dhcp:
         image: 'postgres:15'
         container_name: pgsql_laravel_dhcp
@@ -53,7 +53,27 @@ services:
             retries: 3
             timeout: 5s
 
-    #Sshd image
+    #redis service
+    redis_laravel_dhcp:
+        build:
+            dockerfile: docker/redis/Dockerfile
+        image: 'redis:v1'
+        container_name:
+            redis_laravel_dhcp
+        ports:
+            - '${REDIS_PORT:-6379}:${DOCKER_REDIS_PORT:-6379}'
+
+        restart: always
+        tty: true
+
+        environment:
+            SERVICE_NAME: redis
+
+        working_dir: '/usr/local/etc'
+        networks:
+            - mynet
+
+    #sshd service
     sshd_laravel_dhcp:
         build:
             dockerfile: docker/sshd/Dockerfile

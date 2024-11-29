@@ -2,9 +2,11 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\GenerateDhcpConf;
 use App\Jobs\PutDhcpConf;
 use App\Services\FileService;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Bus;
 
 class PutDhcpConfig extends Command
 {
@@ -20,13 +22,16 @@ class PutDhcpConfig extends Command
      *
      * @var string
      */
-    protected $description = 'Command for put dhcp.config file on server';
+    protected $description = 'Command for create and put dhcpd.config file on server';
 
     /**
      * Execute the console command.
      */
     public function handle(): void
     {
-        PutDhcpConf::dispatch();
+        Bus::chain([
+            (new GenerateDhcpConf())->onQueue('files'),
+            (new PutDhcpConf())->onQueue('files'),
+        ])->dispatch();
     }
 }

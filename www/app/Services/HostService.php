@@ -10,8 +10,6 @@ use App\Models\Host;
 use App\Services\Filters\HostFilter;
 use App\Services\Helpers\Subnet;
 use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Log;
 
 class HostService implements HostContract

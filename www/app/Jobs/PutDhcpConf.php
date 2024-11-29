@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Services\FileService;
+use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -11,16 +12,20 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-class PutDhcpConf implements ShouldQueue
+class PutDhcpConf implements ShouldQueue, ShouldBeUnique
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    public int $timeout = 240;
+
+    public int $retry = 3;
 
     /**
      * Create a new job instance.
      */
     public function __construct()
     {
-        //
+        $this->queue = 'files';
     }
 
     /**

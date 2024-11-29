@@ -6,7 +6,7 @@ RUN useradd -rm -d /home/ubuntu -s /bin/bash -g ubuntu -G sudo -u 1001 test
 
 RUN chown -R test:ubuntu /home/ubuntu
 
-RUN echo 'test:test' | chpasswd
+RUN echo 'test:Qwe123' | chpasswd
 
 RUN service ssh start
 
