@@ -28,18 +28,19 @@ interface HostContract
      * @param string $typeRequest
      * @return bool|array
      */
-    public function update(UpdateRequest $request, HostModel $host, string $typeRequest = 'web'): bool | array;
+    public function update(UpdateRequest $request, HostModel $host, string $typeRequest): bool | array;
 
     /**
      * @param int $host
      * @param string $requestType
      * @return array|null
      */
-    public function show(int $host, string $requestType = 'api'): array | null;
+    public function show(int $host, string $requestType): array | null;
 
     /**
      * @param int $host
+     * @param string $typeRequest
      * @return bool
      */
-    public function destroy(int $host): bool;
+    public function destroy(int $host, string $typeRequest): bool;
 }

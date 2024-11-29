@@ -119,6 +119,7 @@ class HostService implements HostContract
 
     /**
      * @param int $host
+     * @param string $typeRequest
      * @return bool
      */
     public function destroy(int $host, string $typeRequest = 'web'): bool
