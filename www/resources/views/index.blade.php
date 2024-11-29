@@ -12,9 +12,10 @@
     <hr>
     <h2>Список ПЭВМ зарегистрированных в сети последними</h2>
 
-    <div class="alert-message"></div><br>
-    <div class="table-responsive">
+    <div class="alert-message">
         @include('inc.message')
+    </div><br>
+    <div class="table-responsive">
         <table class="table table-striped table-sm">
             <thead>
             <tr>

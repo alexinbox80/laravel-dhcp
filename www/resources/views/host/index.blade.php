@@ -19,9 +19,12 @@
         </div>
     </div>
     <hr>
-    <div class="alert-message">
-        @include('inc.message')
-    </div><br>
+    <div class="alert-block">
+        <div class="alert-message">
+            @include('inc.message')
+        </div>
+    </div>
+    <br>
     <div class="table-responsive">
         <table class="table table-striped table-sm">
             <thead>

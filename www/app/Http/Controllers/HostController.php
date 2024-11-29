@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Host;
 use App\Http\Requests\Host\CreateRequest;
 use App\Http\Requests\Host\UpdateRequest;
-use App\Models\Host;
+use Symfony\Component\HttpFoundation\Response;
 use App\Services\HostService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -36,7 +37,12 @@ class HostController extends Controller
      */
     public function store(HostService $hostService, CreateRequest $request): RedirectResponse
     {
-        return $hostService->store($request);
+        if ($hostService->store($request)) {
+            return redirect()->route('host.index')
+                ->with('success', __('messages.admin.host.create.success'));
+        }
+
+        return back()->with('error', __('messages.admin.host.create.fail'));
     }
 
     /**
@@ -62,7 +68,12 @@ class HostController extends Controller
      */
     public function update(HostService $hostService, UpdateRequest $request, Host $host): RedirectResponse
     {
-        return $hostService->update($request, $host);
+        if (!is_null($hostService->update($request, $host))) {
+            return redirect()->route('host.index')
+                ->with('success', __('messages.admin.host.update.success'));
+        }
+
+        return back()->with('error', __('messages.admin.host.update.fail'));
     }
 
     /**
@@ -70,6 +81,10 @@ class HostController extends Controller
      */
     public function destroy(HostService $hostService, int $host): JsonResponse
     {
-        return $hostService->destroy($host);
+        if ($hostService->destroy($host) === false) {
+            return \response()->json(['status' => 'error'], Response::HTTP_BAD_REQUEST);
+        } else {
+            return \response()->json(['status' => 'ok']);
+        }
     }
 }

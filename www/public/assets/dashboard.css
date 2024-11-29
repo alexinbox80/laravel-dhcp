@@ -90,3 +90,13 @@ body {
     border-color: transparent;
     box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
 }
+
+.alert-block {
+    position: relative;
+}
+
+.alert-message {
+    position: absolute;
+    left: calc(100% / 2);
+    top: -200px;
+}

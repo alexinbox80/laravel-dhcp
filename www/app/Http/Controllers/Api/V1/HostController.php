@@ -56,7 +56,7 @@ class HostController extends Controller
     {
         $host = $hostService->show($host, 'api');
 
-        if (!is_null($host))
+        if ($host)
             return $responseService->success([HostResource::make($host['data'])]);
         else
             return $responseService->unSuccess([

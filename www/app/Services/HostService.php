@@ -10,7 +10,6 @@ use App\Models\Host;
 use App\Services\Filters\HostFilter;
 use App\Services\Helpers\Subnet;
 use Illuminate\Http\Request;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Log;
@@ -51,29 +50,25 @@ class HostService implements HostContract
     /**
      * @param CreateRequest $request
      * @param string $typeRequest
-     * @return RedirectResponse|Host
+     * @return bool|Host
      */
-    public function store(CreateRequest $request, string $typeRequest = 'web'): RedirectResponse | Host
+    public function store(CreateRequest $request, string $typeRequest = 'web'): bool | Host
     {
         $host = new Host(
             $request->validated()
         );
 
-        $result = null;
+        $result = false;
+        $hostSave = $host->save();
 
         if ($typeRequest === 'web') {
-            if ($host->save()) {
-                $result = redirect()->route('host.index')
-                    ->with('success', __('messages.admin.host.create.success'));
-            }
-
-            $result = back()->with('error', __('messages.admin.host.create.fail'));
+            if ($hostSave)
+                $result = true;
         }
 
-        if ($typeRequest === 'api') {
-            $host->save();
+        if ($typeRequest === 'api')
             $result = $host->refresh();
-        }
+
 
         return $result;
     }
@@ -82,27 +77,23 @@ class HostService implements HostContract
      * @param UpdateRequest $request
      * @param Host $host
      * @param string $typeRequest
-     * @return RedirectResponse|array|null
+     * @return bool|array
      */
-    public function update(UpdateRequest $request, Host $host, string $typeRequest = 'web'): RedirectResponse | array | null
+    public function update(UpdateRequest $request, Host $host, string $typeRequest = 'web'): bool | array
     {
         $host = $host->fill($request->validated());
 
-        $result = null;
-        if ($typeRequest === 'web') {
-            if ($host->save()) {
-                $result = redirect()->route('host.index')
-                    ->with('success', __('messages.admin.host.update.success'));
-            }
+        $result = false;
+        $hostSave = $host->save();
 
-            $result = back()->with('error', __('messages.admin.host.update.fail'));
+        if ($typeRequest === 'web') {
+            if ($hostSave)
+                $result = true;
         }
 
         if ($typeRequest === 'api') {
-            if ($host->save()) {
+            if ($hostSave)
                 $result = ['data' => $host->refresh()];
-            } else
-                $result = null;
         }
 
         return $result;
@@ -128,25 +119,22 @@ class HostService implements HostContract
 
     /**
      * @param int $host
-     * @return JsonResponse | bool
+     * @return bool
      */
-    public function destroy(int $host, string $typeRequest = 'web'): JsonResponse | bool
+    public function destroy(int $host, string $typeRequest = 'web'): bool
     {
         try {
             $deleted = Host::destroy($host);
+
             if ($typeRequest === 'web') {
-                if ( $deleted === false) {
-                    return \response()->json(['status' => 'error'], Response::HTTP_BAD_REQUEST);
-                } else {
-                    return \response()->json(['status' => 'ok']);
-                }
+                return $deleted;
             }
             if ($typeRequest === 'api') {
                 return $deleted;
             }
         } catch (\Exception $e) {
             Log::error($e->getMessage() . ' ' . $e->getCode());
-            //return \response()->json(['status' => 'error'], Response::HTTP_BAD_REQUEST);
+            return false;
         }
     }
 }

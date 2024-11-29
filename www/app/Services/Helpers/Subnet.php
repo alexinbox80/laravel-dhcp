@@ -13,7 +13,7 @@ class Subnet
         $subnets = [];
 
         foreach ($results as $result) {
-            $subnets[] = $result->byte1 . '.' . $result->byte2 . '.' . $result->byte3;
+            $subnets[] = (string)$result->byte1 . '.' . $result->byte2 . '.' . $result->byte3;
         }
 
         return $subnets;

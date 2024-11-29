@@ -2,13 +2,10 @@
 
 namespace App\Services\Contracts;
 
-use App\Http\Controllers\Api\V1\HostController;
 use App\Models\Host as HostModel;
 use App\Http\Requests\Host\CreateRequest;
 use App\Http\Requests\Host\UpdateRequest;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\RedirectResponse;
 
 interface HostContract
 {
@@ -21,17 +18,17 @@ interface HostContract
 
     /**
      * @param CreateRequest $request
-     * @return RedirectResponse | HostModel
+     * @return bool | HostModel
      */
-    public function store(CreateRequest $request): RedirectResponse | HostModel;
+    public function store(CreateRequest $request): bool | HostModel;
 
     /**
      * @param UpdateRequest $request
      * @param HostModel $host
      * @param string $typeRequest
-     * @return RedirectResponse|array|null
+     * @return bool|array
      */
-    public function update(UpdateRequest $request, HostModel $host, string $typeRequest = 'web'): RedirectResponse | array | null;
+    public function update(UpdateRequest $request, HostModel $host, string $typeRequest = 'web'): bool | array;
 
     /**
      * @param int $host
@@ -42,7 +39,7 @@ interface HostContract
 
     /**
      * @param int $host
-     * @return JsonResponse | bool
+     * @return bool
      */
-    public function destroy(int $host): JsonResponse | bool;
+    public function destroy(int $host): bool;
 }

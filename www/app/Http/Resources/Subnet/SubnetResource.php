@@ -10,12 +10,11 @@ class SubnetResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @return array<string, mixed>
+     * @param Request $request
+     * @return string
      */
-    public function toArray(Request $request): array
+    public function toArray(Request $request): string
     {
-        return [
-            $this->resource
-        ];
+        return $this->resource;
     }
 }

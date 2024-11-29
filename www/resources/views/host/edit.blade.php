@@ -10,6 +10,7 @@
             @csrf
             @method('put')
             <div class="form-check">
+                <input type="hidden" name="FLAG" value="0" />
                 <input type="checkbox" class="form-check-input" name="FLAG" id="enable"
                        @if($host->FLAG) checked @endif value="1">
                 <label for="enable">Включить/выключить хост</label>
