@@ -60,7 +60,7 @@ class HostController extends Controller
             return $responseService->success([HostResource::make($host['data'])]);
         else
             return $responseService->unSuccess([
-                'message' => __('messages.admin.host.show.fail')
+                'message' => __('messages.admin.host.show.failed')
             ]);
     }
 
@@ -80,7 +80,7 @@ class HostController extends Controller
             return $responseService->success([HostResource::make($host['data'])]);
         else
             return $responseService->unSuccess([
-                'message' => __('messages.admin.host.update.fail')
+                'message' => __('messages.admin.host.update.failed')
             ]);
     }
 
@@ -101,7 +101,7 @@ class HostController extends Controller
             ]);
         else
             return $responseService->unSuccess([
-                'message' => __('messages.admin.host.destroy.fail')
+                'message' => __('messages.admin.host.destroy.failed')
             ]);
     }
 }

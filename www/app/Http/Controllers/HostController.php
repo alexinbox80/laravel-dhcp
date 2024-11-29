@@ -42,7 +42,7 @@ class HostController extends Controller
                 ->with('success', __('messages.admin.host.create.success'));
         }
 
-        return back()->with('error', __('messages.admin.host.create.fail'));
+        return back()->with('error', __('messages.admin.host.create.failed'));
     }
 
     /**
@@ -73,7 +73,7 @@ class HostController extends Controller
                 ->with('success', __('messages.admin.host.update.success'));
         }
 
-        return back()->with('error', __('messages.admin.host.update.fail'));
+        return back()->with('error', __('messages.admin.host.update.failed'));
     }
 
     /**

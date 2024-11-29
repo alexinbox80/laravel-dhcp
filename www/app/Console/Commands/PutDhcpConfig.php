@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\PutDhcpConf;
 use App\Services\FileService;
 use Illuminate\Console\Command;
 
@@ -26,7 +27,6 @@ class PutDhcpConfig extends Command
      */
     public function handle(): void
     {
-        $result = FileService::putDhcpConfig();
-        dump($result);
+        PutDhcpConf::dispatch();
     }
 }
