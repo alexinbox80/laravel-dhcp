@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Services\FileService;
+use App\Services\Helpers\Debug;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -10,7 +11,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
 class PutDhcpConf implements ShouldQueue, ShouldBeUnique
 {
@@ -33,9 +33,7 @@ class PutDhcpConf implements ShouldQueue, ShouldBeUnique
      */
     public function handle(): void
     {
-        Log::info(PHP_EOL);
-        Log::info(__CLASS__);
         $result = FileService::putDhcpConfig();
-        Log::info(__CLASS__ . ' ' . json_encode($result));
+        (new Debug)([__METHOD__, json_encode([$this->queue, $result])]);
     }
 }

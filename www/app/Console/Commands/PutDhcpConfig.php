@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use App\Jobs\GenerateDhcpConf;
 use App\Jobs\PutDhcpConf;
-use App\Services\FileService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Bus;
 
@@ -33,5 +32,7 @@ class PutDhcpConfig extends Command
             (new GenerateDhcpConf())->onQueue('files'),
             (new PutDhcpConf())->onQueue('files'),
         ])->dispatch();
+
+        $this->info('Dhcp configuration file creation queued.');
     }
 }

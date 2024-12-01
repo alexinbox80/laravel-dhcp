@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\Host;
 use App\Repository\HostRepository;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class FileService

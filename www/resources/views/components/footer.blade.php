@@ -1,4 +1,4 @@
-<footer class="text-muted py-5">
+<footer class="text-muted py-5 footer-ml">
     <div class="container">
         <p class="float-end mb-1">
             <a href="{{ Illuminate\Support\Facades\URL::previous() }}">На верх</a>

@@ -9,8 +9,9 @@
         <form method="post" action="{{ route('host.store') }}">
             @csrf
             <div class="form-check">
-                <input type="checkbox" class="form-check-input" name="FLAG" id="enable"
-                       value="{{ old('FLAG') }}">
+                <input type="hidden" name="FLAG" value="0" />
+                <input type="checkbox" class="form-check-input" name="FLAG" id="enable" checked
+                       value="1">
                 <label for="enable">Включить/выключить хост</label>
             </div>
             <br>

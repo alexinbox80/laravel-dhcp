@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Services\FileService;
+use App\Services\Helpers\Debug;
 use Illuminate\Bus\Queueable;
 use Illuminate\Bus\Batchable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -10,7 +11,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class GenerateDhcpConf implements ShouldQueue, ShouldBeUnique
@@ -37,14 +37,12 @@ class GenerateDhcpConf implements ShouldQueue, ShouldBeUnique
      */
     public function handle(): void
     {
-        Log::info(PHP_EOL);
-        Log::info(__CLASS__ . ' ' . 'Generating DHCP Conf');
         $fileName = config('dhcpd.conf.fileName');
         $localPath = config('dhcpd.conf.localPath');
 
         $file = Storage::disk('public')->path($localPath . DIRECTORY_SEPARATOR . $fileName);
-        Log::info(__CLASS__ . ' ' . json_encode($file));
         $result = FileService::makeDhcpConfig($file);
-        Log::info(json_encode(__CLASS__ . ' ' . json_encode($result)));
+
+        (new Debug)([__METHOD__, json_encode([$this->queue, $fileName, $localPath, $file, $result])]);
     }
 }

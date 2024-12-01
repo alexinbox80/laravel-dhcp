@@ -135,5 +135,7 @@ class HostService implements HostContract
             Log::error($e->getMessage() . ' ' . $e->getCode());
             return false;
         }
+
+        return false;
     }
 }
