@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\HostController;
 use App\Http\Controllers\Api\V1\SubnetController;
+use App\Http\Controllers\Auth\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,14 +17,22 @@ use App\Http\Controllers\Api\V1\SubnetController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::prefix('auth')->group(function () {
+    Route::post('login', [AuthController::class, 'login']);
+    Route::post('logout', [AuthController::class, 'logOutUser'])->middleware('auth:api');
+    Route::post('register', [AuthController::class, 'register']);
 });
 
-Route::apiResource('/host', HostController::class);
-Route::apiResource('/subnets', SubnetController::class)
-    ->only([
-        'index',
-    ])->names([
-        'subnets.index'
-    ]);;
+//Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//    return $request->user();
+//});
+
+Route::middleware('auth:api')->group(function () {
+    Route::apiResource('/host', HostController::class);
+    Route::apiResource('/subnets', SubnetController::class)
+        ->only([
+            'index',
+        ])->names([
+            'subnets.index'
+        ]);
+});

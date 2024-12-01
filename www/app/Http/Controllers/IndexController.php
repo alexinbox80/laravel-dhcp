@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\IndexService;
+use App\Services\Contracts\IndexContract as IndexService;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
 

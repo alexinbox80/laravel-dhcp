@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Subnet\SubnetResource;
-use App\Services\Response\ResponseService;
-use App\Services\SubnetService;
+use App\Services\Contracts\SubnetContract as SubnetService;
+use App\Services\Contracts\ResponseContract as ResponseService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

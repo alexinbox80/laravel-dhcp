@@ -6,7 +6,7 @@ use App\Models\Host;
 use App\Http\Requests\Host\CreateRequest;
 use App\Http\Requests\Host\UpdateRequest;
 use Symfony\Component\HttpFoundation\Response;
-use App\Services\HostService;
+use App\Services\Contracts\HostContract as HostService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\View;

@@ -7,8 +7,8 @@ use App\Http\Requests\Host\CreateRequest;
 use App\Http\Requests\Host\UpdateRequest;
 use App\Http\Resources\Host\HostResource;
 use App\Models\Host;
-use App\Services\HostService;
-use App\Services\Response\ResponseService;
+use App\Services\Contracts\HostContract as HostService;
+use App\Services\Contracts\ResponseContract as ResponseService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
