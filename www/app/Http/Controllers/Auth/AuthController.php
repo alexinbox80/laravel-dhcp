@@ -65,6 +65,8 @@ class AuthController extends Controller
     {
         $response = $authService->register($request);
 
-        return $responseService->success($response);
+        return $responseService->success(
+            $response
+        );
     }
 }

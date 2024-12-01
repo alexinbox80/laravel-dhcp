@@ -41,7 +41,11 @@ class AuthService implements AuthContract
 
         $success['token'] = $user['account']->createToken('AccessToken')->accessToken;
 
-        return ['user' => $user, 'token' => $success['token']];
+        return [
+            'id' => $user['account']['id'],
+            'email' => $user['account']['email'],
+            'access_token' => $success['token']
+        ];
     }
 
     /*
