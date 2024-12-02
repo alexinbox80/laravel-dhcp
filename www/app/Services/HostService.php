@@ -67,7 +67,6 @@ class HostService implements HostContract
         if ($typeRequest === 'api')
             $result = $host->refresh();
 
-
         return $result;
     }
 

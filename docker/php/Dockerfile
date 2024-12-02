@@ -21,15 +21,20 @@ RUN cd /opt/oracle && unzip instantclient-sqlplus-linux.x64-11.2.0.4.0.zip && rm
 RUN cd /opt/oracle/instantclient_11_2 && ln -s /opt/oracle/instantclient_11_2/libclntsh.so.11.1 libclntsh.so
 RUN cd /opt/oracle/instantclient_11_2 && ln -s /opt/oracle/instantclient_11_2/libocci.so.11.1 libocci.so
 
-ENV LD_LIBRARY_PATH /opt/oracle/instantclient_11_2/
-
 RUN echo /opt/oracle/instantclient_11_2 > /etc/ld.so.conf.d/oracle-instantclient.conf && ldconfig
 
+ENV LD_LIBRARY_PATH /opt/oracle/instantclient_11_2
+
 # Install Oracle extensions
-RUN docker-php-ext-configure pdo_oci --with-pdo-oci=instantclient,/opt/oracle/instantclient_11_2 \
-&& echo 'instantclient,/opt/oracle/instantclient_11_2/' | pecl install oci8 \
-&& docker-php-ext-install pdo_oci \
-&& docker-php-ext-enable oci8
+#RUN docker-php-ext-configure pdo_oci --with-pdo-oci=instantclient,/opt/oracle/instantclient_11_2 \
+#&& echo 'instantclient,/opt/oracle/instantclient_11_2' | pecl install oci8 \
+#&& docker-php-ext-install pdo_oci \
+#&& docker-php-ext-enable oci8
+
+#RUN docker-php-ext-configure oci8 --with-oci8=instantclient,/opt/oracle/instantclient_11_2 \
+#&& echo 'shared,instantclient,/opt/oracle/instantclient_11_2' | pecl install oci8 \
+#&& docker-php-ext-install pdo_oci \
+#&& docker-php-ext-enable oci8
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- \

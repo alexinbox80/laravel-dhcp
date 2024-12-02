@@ -10,3 +10,5 @@ php artisan passport:keys --force
 
 php artisan passport:install
 
+php artisan passport:client --password
+

@@ -2,14 +2,19 @@
 
 namespace App\Services\Contracts;
 
-use App\Models\Host as HostModel;
-use App\Http\Requests\Host\CreateRequest;
-use App\Http\Requests\Host\UpdateRequest;
-use Illuminate\Http\Request;
+use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Requests\Auth\ResetPasswordRequest;
 
 interface AuthContract
 {
-    public function resetPassword(Request $request): array;
+    public function login(LoginRequest $loginRequest): array;
 
-    public function register(Request $request): array;
+    public function logOutUser(): void;
+
+    public function resetPassword(ResetPasswordRequest $resetPasswordRequest): array;
+
+    public function register(RegisterRequest $registerRequest): array;
+
+    public function refreshToken(\Illuminate\Http\Request $request): array;
 }

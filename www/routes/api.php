@@ -1,10 +1,9 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\HostController;
 use App\Http\Controllers\Api\V1\SubnetController;
-use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Api\V1\Auth\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +20,8 @@ Route::prefix('auth')->group(function () {
     Route::post('login', [AuthController::class, 'login']);
     Route::post('logout', [AuthController::class, 'logOutUser'])->middleware('auth:api');
     Route::post('register', [AuthController::class, 'register']);
+    Route::post('reset-password', [AuthController::class, 'resetPassword'])->middleware('auth:api');
+    Route::post('refresh-token', [AuthController::class, 'refreshToken'])->middleware('auth:api');
 });
 
 //Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
