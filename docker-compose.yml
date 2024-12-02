@@ -6,7 +6,7 @@ services:
             dockerfile: docker/php/Dockerfile
         container_name: php_laravel_dhcp
         volumes:
-            - ./www:/var/www/default/htdocs/
+            - ./www:/var/www/html/htdocs/
         ports:
             - 9000:9000
         networks:
@@ -22,8 +22,8 @@ services:
             - PHP_FPM_ENABLE=1
             - PHP_FPM_SERVER_ADDR=php_laravel_dhcp
         volumes:
-            - ./www:/var/www/default/htdocs/
-            - ./nginx/nginx.conf:/etc/nginx/conf.d/dhcpdw.conf
+            - ./www:/var/www/html/htdocs/
+            - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/dhcpdw.conf
             - ./log:/var/log/nginx-stable/
         ports:
             - 88:80
