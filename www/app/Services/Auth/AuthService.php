@@ -11,7 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Request;
-use Illuminate\Http\Request as HttpRequest;
+use App\Http\Requests\Auth\RefreshTokenRequest as HttpRequest;
 
 class AuthService implements AuthContract
 {
@@ -98,6 +98,8 @@ class AuthService implements AuthContract
 
     public function refreshToken(HttpRequest $request): array
     {
+        $request->validated();
+
         $request = Request::create('oauth/token', 'POST', [
             'grant_type' => 'password',
             'client_id' => env('CLIENT_ID'),

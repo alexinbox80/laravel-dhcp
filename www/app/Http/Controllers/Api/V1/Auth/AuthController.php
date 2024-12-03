@@ -10,7 +10,7 @@ use App\Http\Resources\Auth\AuthApiResource;
 use App\Services\Contracts\AuthContract as AuthService;
 use App\Services\Contracts\ResponseContract as ResponseService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request as HttpRequest;
+use App\Http\Requests\Auth\RefreshTokenRequest as HttpRequest;
 
 class AuthController extends Controller
 {
