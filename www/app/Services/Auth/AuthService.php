@@ -46,21 +46,29 @@ class AuthService implements AuthContract
     {
         $resetPasswordRequest->validated();
 
-        $user['account'] = User::update([
-            'email' => $resetPasswordRequest->email,
-        ], [
-            'name' => 'test',
-            'password' => Hash::make($resetPasswordRequest->password)
-        ]);
+        if(Hash::check($resetPasswordRequest->oldPassword, auth()->user()->password)
+            && ($resetPasswordRequest->email === auth()->user()->email)) {
 
-        $accessToken = $user->createToken('AccessToken');
+            User::where('email', $resetPasswordRequest->email)
+                ->update([
+                    'name' => 'test',
+                    'password' => Hash::make($resetPasswordRequest->password)
+                ]);
 
-        $success['access_token'] = $accessToken->accessToken;
-        $success['expires_at'] = Carbon::parse(
-            $accessToken->token->expires_at
-        )->toDateTimeString();
+            $user = Auth::user();
 
-        return $success;
+            $accessToken = $user->createToken('AccessToken');
+
+            $success['access_token'] = $accessToken->accessToken;
+            $success['expires_at'] = Carbon::parse(
+                $accessToken->token->expires_at
+            )->toDateTimeString();
+
+
+            return $success;
+        }
+
+        return [];
     }
 
     public function register(RegisterRequest $registerRequest): array

@@ -10,6 +10,7 @@ use App\Http\Resources\Auth\AuthApiResource;
 use App\Services\Contracts\AuthContract as AuthService;
 use App\Services\Contracts\ResponseContract as ResponseService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request as HttpRequest;
 
 class AuthController extends Controller
 {
@@ -46,7 +47,7 @@ class AuthController extends Controller
     {
         $response = $authService->resetPassword($resetPasswordRequest);
 
-        if (!$response['status']) {
+        if (count($response) === 0) {
             return $responseService->forbidden(['message' => __('auth.reset.password.failed')]);
         }
 
@@ -71,7 +72,7 @@ class AuthController extends Controller
     public function refreshToken(
         AuthService $authService,
         ResponseService $responseService,
-        \Illuminate\Http\Request $request
+        HttpRequest $request
     ): JsonResponse
     {
         $response = $authService->refreshToken($request);

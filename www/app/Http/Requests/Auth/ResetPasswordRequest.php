@@ -23,6 +23,7 @@ class ResetPasswordRequest extends FormRequest
     {
         return [
             'email' => ['required', 'string', 'exists:users,email', 'max:50'],
+            'oldPassword' => ['required', 'string', 'min:8', 'max:24'],
             'password' => ['required_with:confirmPassword', 'string', 'same:confirmPassword', 'min:8', 'max:24'],
             'confirmPassword' => ['required', 'string', 'min:8', 'max:24']
         ];
