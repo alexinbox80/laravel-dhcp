@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\Auth\ResetPasswordRequest;
+use App\Http\Resources\Auth\AuthApiResource;
 use App\Services\Contracts\AuthContract as AuthService;
 use App\Services\Contracts\ResponseContract as ResponseService;
 use Illuminate\Http\JsonResponse;
@@ -21,7 +22,7 @@ class AuthController extends Controller
         $response = $authService->login($loginRequest);
 
         if (count($response) > 0) {
-            return $responseService->success($response);
+            return $responseService->success([AuthApiResource::make($response)]);
         } else {
             return $responseService->unprocessableContent(['message' => __('auth.login.failed')]);
         }
@@ -49,7 +50,7 @@ class AuthController extends Controller
             return $responseService->forbidden(['message' => __('auth.reset.password.failed')]);
         }
 
-        return $responseService->success($response);
+        return $responseService->success([AuthApiResource::make($response)]);
     }
 
     public function register(
@@ -61,7 +62,7 @@ class AuthController extends Controller
         $response = $authService->register($registerRequest);
 
         if (count($response) > 0) {
-            return $responseService->success($response);
+            return $responseService->success([AuthApiResource::make($response)]);
         } else {
             return $responseService->unprocessableContent(['message' => __('auth.register.failed')]);
         }
@@ -75,6 +76,6 @@ class AuthController extends Controller
     {
         $response = $authService->refreshToken($request);
 
-        return $responseService->success($response);
+        return $responseService->success([AuthApiResource::make($response)]);
     }
 }

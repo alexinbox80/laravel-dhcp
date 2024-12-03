@@ -40,6 +40,7 @@ class AppServiceProvider extends ServiceProvider
     {
         //Paginator::defaultSimpleView('vendor.pagination.default');
         Paginator::useBootstrap();
+        Passport::enablePasswordGrant();
        // Passport::ignoreRoutes();
     }
 }
