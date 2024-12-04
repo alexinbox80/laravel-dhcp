@@ -1,53 +1,65 @@
 <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
     <div class="position-sticky pt-3 sidebar-sticky">
         <ul class="nav flex-column">
-            <li class="nav-item nav-link">
-{{--                <h4>Здравствуйте, {{ //Auth::user()->name }}!</h4>--}}
-                <h4>Здравствуйте!</h4>
-            </li>
-{{--            @isset(Auth::user()->avatar)--}}
+            @if(Auth::check())
                 <li class="nav-item nav-link">
-                    <br>
-{{--                    <img style="width: 200px;" src="{{ Auth::user()->avatar }}" alt="avatar">--}}
-                    <br>
+                    <h4>{{ Auth::user()->email }}</h4>
                 </li>
-{{--            @endisset--}}
-            <li class="nav-item">
-                <a class="nav-link @if(request()->routeIs('host.index')) active @endif" aria-current="page" href="{{ route('host.index') }}">
-                    <span data-feather="home" class="align-text-bottom"></span>
-                    Добавить ПЭВМ
-                </a>
-            </li>
+            @endif
+            @if (Route::has('login'))
+                <li class="nav-item">
+                    <div class="sm:fixed sm:top-0 sm:right-0 p-6 text-right z-10">
+                        @auth
+                            <a class="nav-link @if(request()->routeIs('host.index')) active @endif" aria-current="page"
+                               href="{{ route('host.index') }}">
+                                <span data-feather="home" class="align-text-bottom">
+                                    Добавить ПЭВМ
+                                </span>
+                            </a>
+                        @else
+                            <div class="nav-link">
+                                <a href="{{ route('login') }}"
+                                   class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Log
+                                    in</a>
+
+                                @if (Route::has('register'))
+                                    <a href="{{ route('register') }}"
+                                       class="ml-4 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Register</a>
+                                @endif
+                            </div>
+                        @endauth
+                    </div>
+                </li>
+            @endif
+            {{--            <li class="nav-item">--}}
+            {{--                <a class="nav-link @if(request()->routeIs('host.index')) active @endif" aria-current="page"--}}
+            {{--                   href="{{ route('host.index') }}">--}}
+            {{--                    <span data-feather="home" class="align-text-bottom"></span>--}}
+            {{--                    Добавить ПЭВМ--}}
+            {{--                </a>--}}
+            {{--            </li>--}}
             <li class="nav-item">
                 <a class="nav-link @if(request()->routeIs('index')) active @endif" href="{{ route('index') }}">
-                    <span data-feather="folder" class="align-text-bottom"></span>
-                    Главная страница
+                    <span data-feather="folder" class="align-text-bottom">
+                        Главная страница
+                    </span>
                 </a>
             </li>
-{{--            <li class="nav-item">--}}
-{{--                <a class="nav-link @if(request()->routeIs('admin.news.*')) active @endif" href="{{ route('admin.news.index') }}">--}}
-{{--                    <span data-feather="file" class="align-text-bottom"></span>--}}
-{{--                    Новости--}}
-{{--                </a>--}}
-{{--            </li>--}}
-{{--            <li class="nav-item">--}}
-{{--                <a class="nav-link @if(request()->routeIs('admin.order.*')) active @endif" href="{{ route('admin.order.index') }}">--}}
-{{--                    <span data-feather="file" class="align-text-bottom"></span>--}}
-{{--                    Заказы--}}
-{{--                </a>--}}
-{{--            </li>--}}
-{{--            <li class="nav-item">--}}
-{{--                <a class="nav-link @if(request()->routeIs('admin.feedback.*')) active @endif" href="{{ route('admin.feedback.index') }}">--}}
-{{--                    <span data-feather="file" class="align-text-bottom"></span>--}}
-{{--                    Отзывы--}}
-{{--                </a>--}}
-{{--            </li>--}}
-{{--            <li class="nav-item">--}}
-{{--                <a class="nav-link @if(request()->routeIs('admin.profiles.*')) active @endif" href="{{ route('admin.profiles.index') }}">--}}
-{{--                    <span data-feather="file" class="align-text-bottom"></span>--}}
-{{--                    Пользователи--}}
-{{--                </a>--}}
-{{--            </li>--}}
+            @if(Auth::check())
+                <li class="nav-item">
+                    <div class="navbar-nav">
+                        <div class="nav-item text-nowrap">
+                            <a class="nav-link px-3" href="{{ route('logout') }}"
+                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                {{ __('Выход') }}
+                            </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form>
+                        </div>
+                    </div>
+                </li>
+            @endif
         </ul>
     </div>
 </nav>

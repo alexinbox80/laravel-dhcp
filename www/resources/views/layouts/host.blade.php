@@ -57,7 +57,6 @@
     <link href="{{ asset('assets/dashboard.css') }}" rel="stylesheet">
 </head>
 <body>
-
 <x-host.header></x-host.header>
 <div class="container-fluid">
     <div class="row">
@@ -69,9 +68,6 @@
 </div>
 <x-footer/>
 <script src="{{ asset('assets/bootstrap.bundle.min.js') }}"></script>
-{{--<script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"></script>--}}
-{{--    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>--}}
-{{--    <script src="{{ asset('assets/dashboard.js') }}"></script>--}}
 @stack('js')
 </body>
 </html>
