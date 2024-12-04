@@ -26,10 +26,10 @@ RUN echo /opt/oracle/instantclient_11_2 > /etc/ld.so.conf.d/oracle-instantclient
 ENV LD_LIBRARY_PATH /opt/oracle/instantclient_11_2
 
 # Install Oracle extensions
-#RUN docker-php-ext-configure pdo_oci --with-pdo-oci=instantclient,/opt/oracle/instantclient_11_2 \
-#&& echo 'instantclient,/opt/oracle/instantclient_11_2' | pecl install oci8 \
-#&& docker-php-ext-install pdo_oci \
-#&& docker-php-ext-enable oci8
+RUN docker-php-ext-configure pdo_oci --with-pdo-oci=instantclient,/opt/oracle/instantclient_11_2 \
+&& echo 'instantclient,/opt/oracle/instantclient_11_2' | pecl install oci8 \
+&& docker-php-ext-install pdo_oci \
+&& docker-php-ext-enable oci8
 
 #RUN docker-php-ext-configure oci8 --with-oci8=instantclient,/opt/oracle/instantclient_11_2 \
 #&& echo 'shared,instantclient,/opt/oracle/instantclient_11_2' | pecl install oci8 \
@@ -44,6 +44,13 @@ RUN curl -sS https://getcomposer.org/installer | php -- \
 
 
 RUN apt-get install -y supervisor
+
+RUN apt-get install -y npm nodejs
+
+RUN chown -R 33:33 /var/www
+WORKDIR /var/www/html/htdocs
+
+#RUN npm install
 
 COPY docker/php/laravel-worker.conf /etc/supervisor/conf.d/laravel-worker.conf
 
